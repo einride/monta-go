@@ -5,6 +5,6 @@ type Visibility string
 
 // Known [Visibility] values.
 const (
-	SiteVisibilityPrivate = "private"
-	SiteVisibilityPublic  = "public"
+	VisibilityPrivate = "private"
+	VisibilityPublic  = "public"
 )
