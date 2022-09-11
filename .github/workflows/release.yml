@@ -1,12 +1,13 @@
-name: ci
+name: release
 
 on:
-  pull_request:
-    branches:
-      - "*"
+  push:
+    branches: [master]
+
+permissions: write-all
 
 jobs:
-  make:
+  release:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Sage
@@ -17,12 +18,12 @@ jobs:
       - name: Make
         run: make
 
-      - name: Dry-run semantic-release
-        run: make semantic-release repo=${{ github.repository }} dry=true
+      - name: Run semantic-release
+        run: make semantic-release repo=${{ github.repository }} dry=false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Dry-run goreleaser
+      - name: Run goreleaser
         uses: goreleaser/goreleaser-action@v2.9.1
         with:
           version: latest
