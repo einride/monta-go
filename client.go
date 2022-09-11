@@ -78,12 +78,24 @@ func (c *Client) getToken(ctx context.Context) (_ *Token, err error) {
 	defer func() {
 		c.tokenSemaphore <- struct{}{}
 	}()
-	cachedToken, ok := c.getCachedToken()
-	if ok {
-		return cachedToken, nil
+	if c.token != nil {
+		now := time.Now()
+		if c.token.AccessTokenExpirationTime.After(now) {
+			return c.token, nil
+		}
+		if c.token.RefreshTokenExpirationTime.After(now) {
+			refreshedToken, err := c.RefreshToken(ctx, &RefreshTokenRequest{
+				RefreshToken: c.token.RefreshToken,
+			})
+			if err != nil {
+				return nil, err
+			}
+			c.token = refreshedToken
+			return refreshedToken, nil
+		}
 	}
 	if c.config.clientID == "" || c.config.clientSecret == "" {
-		return nil, fmt.Errorf("unable to create token - missing Client ID and Client Secret")
+		return nil, fmt.Errorf("unable to create token - missing client ID and client secret")
 	}
 	createdToken, err := c.CreateToken(ctx, &CreateTokenRequest{
 		ClientID:     c.config.clientID,
@@ -94,11 +106,4 @@ func (c *Client) getToken(ctx context.Context) (_ *Token, err error) {
 	}
 	c.token = createdToken
 	return createdToken, nil
-}
-
-func (c *Client) getCachedToken() (*Token, bool) {
-	if c.token != nil && c.token.AccessTokenExpirationTime.After(time.Now()) {
-		return c.token, true
-	}
-	return nil, false
 }
