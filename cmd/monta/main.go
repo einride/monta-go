@@ -6,6 +6,7 @@ import (
 	"os"
 	"strings"
 	"text/tabwriter"
+	"time"
 
 	"github.com/adrg/xdg"
 	"github.com/spf13/cobra"
@@ -87,6 +88,26 @@ func newClientWithAuthentication(cmd *cobra.Command) (*monta.Client, error) {
 		var token monta.Token
 		if err := json.Unmarshal(data, &token); err != nil {
 			return nil, err
+		}
+		now := time.Now()
+		if token.AccessTokenExpirationTime.Before(now) {
+			if token.RefreshTokenExpirationTime.Before(now) {
+				return nil, fmt.Errorf("cached tokens have expired, please re-authenticate with `monta login`")
+			}
+			refreshedToken, err := monta.NewClient().RefreshToken(cmd.Context(), &monta.RefreshTokenRequest{
+				RefreshToken: token.RefreshToken,
+			})
+			if err != nil {
+				return nil, err
+			}
+			refreshedTokenData, err := json.MarshalIndent(refreshedToken, "", "  ")
+			if err != nil {
+				return nil, err
+			}
+			if err := os.WriteFile(authFilepath, refreshedTokenData, 0o600); err != nil {
+				return nil, err
+			}
+			token = *refreshedToken
 		}
 		options = append(options, monta.WithToken(&token))
 	}
@@ -298,7 +319,18 @@ func newLoginCommand() *cobra.Command {
 		if err := os.WriteFile(authFilepath, tokenData, 0o600); err != nil {
 			return err
 		}
-		cmd.Println("Successfully logged in.")
+		cmd.Println("Successfully authenticated to Monta Partner API.")
+		cmd.Println()
+		cmd.Printf(
+			"  (access token expires at %s in %s)\n",
+			token.AccessTokenExpirationTime.Format(time.RFC3339),
+			time.Until(token.AccessTokenExpirationTime).Round(time.Second),
+		)
+		cmd.Printf(
+			"  (refresh token expires at %s in %s)\n",
+			token.RefreshTokenExpirationTime.Format(time.RFC3339),
+			time.Until(token.RefreshTokenExpirationTime).Round(time.Second),
+		)
 		return nil
 	}
 	return cmd
