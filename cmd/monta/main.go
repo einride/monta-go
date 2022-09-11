@@ -18,6 +18,7 @@ func main() {
 	cmd.AddCommand(newLoginCommand())
 	cmd.AddCommand(newMeCommand())
 	cmd.AddCommand(newListSitesCommand())
+	cmd.AddCommand(newListChargePointsCommand())
 	if err := cmd.Execute(); err != nil {
 		_, _ = fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
@@ -171,6 +172,77 @@ func newListSitesCommand() *cobra.Command {
 			}
 			for _, site := range response.Sites {
 				data, err := json.MarshalIndent(site, "", "  ")
+				if err != nil {
+					return err
+				}
+				cmd.Println(string(data))
+			}
+			if *page >= int(response.PageMeta.TotalPageCount) {
+				break
+			}
+			*page = int(response.PageMeta.CurrentPage + 1)
+		}
+		return nil
+	}
+	return cmd
+}
+
+func newListChargePointsCommand() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "charge-points",
+		Short: "List your charge points.",
+		Annotations: map[string]string{
+			apiCommandAnnotation: "GET /v1/charge-points",
+		},
+	}
+	cmd.SetHelpFunc(helpFunc)
+	cmd.SetUsageFunc(usageFunc)
+	cmd.SetOut(os.Stdout)
+	cmd.SetErr(os.Stderr)
+	page := cmd.Flags().Int("page", 0, "page number to retrieve")
+	cmd.Flag("page").Annotations = map[string][]string{
+		argumentFlagAnnotation: {},
+	}
+	perPage := cmd.Flags().Int("per-page", 10, "number of items per page")
+	cmd.Flag("per-page").Annotations = map[string][]string{
+		argumentFlagAnnotation: {},
+	}
+	siteID := cmd.Flags().Int64("site-id", 0, "site ID to filter by")
+	cmd.Flag("per-page").Annotations = map[string][]string{
+		argumentFlagAnnotation: {},
+	}
+	cmd.RunE = func(cmd *cobra.Command, _ []string) error {
+		client, err := newClientWithAuthentication(cmd)
+		if err != nil {
+			return err
+		}
+		var allPages bool
+		if *page == 0 {
+			allPages = true
+			*page = 1
+		}
+		for {
+			request := &monta.ListChargePointsRequest{
+				Page:    *page,
+				PerPage: *perPage,
+			}
+			if cmd.Flags().Changed("site-id") {
+				request.SiteID = siteID
+			}
+			response, err := client.ListChargePoints(cmd.Context(), request)
+			if err != nil {
+				return err
+			}
+			if !allPages {
+				data, err := json.MarshalIndent(response, "", "  ")
+				if err != nil {
+					return err
+				}
+				cmd.Println(string(data))
+				break
+			}
+			for _, chargePoint := range response.ChargePoints {
+				data, err := json.MarshalIndent(chargePoint, "", "  ")
 				if err != nil {
 					return err
 				}

@@ -35,6 +35,19 @@ if err != nil {
 fmt.Println(response)
 ```
 
+#### `GET /v1/charge-points`
+
+```go
+response, err := client.ListChargePoints(ctx, &monta.ListChargePointsRequest{
+	Page:    1,
+	PerPage: 10,
+})
+if err != nil {
+	panic(err)
+}
+fmt.Println(response)
+```
+
 ### CLI
 
 #### Login
@@ -53,4 +66,10 @@ $ monta me
 
 ```
 $ monta sites
+```
+
+#### `GET /v1/charge-points`
+
+```
+$ monta charge-points
 ```
