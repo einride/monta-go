@@ -80,7 +80,10 @@ semantic-release: $(sagefile)
 ifndef repo
 	 $(error missing argument repo="...")
 endif
-	@$(sagefile) SemanticRelease "$(repo)"
+ifndef dry
+	 $(error missing argument dry="...")
+endif
+	@$(sagefile) SemanticRelease "$(repo)" "$(dry)"
 
 .PHONY: monta-cmd
 monta-cmd:

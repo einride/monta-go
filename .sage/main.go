@@ -72,14 +72,18 @@ func GitVerifyNoDiff(ctx context.Context) error {
 	return sggit.VerifyNoDiff(ctx)
 }
 
-func SemanticRelease(ctx context.Context, repo string) error {
+func SemanticRelease(ctx context.Context, repo string, dry bool) error {
 	sg.Logger(ctx).Println("triggering release...")
-	return sggosemanticrelease.Command(ctx,
+	args := []string{
 		"--allow-initial-development-versions",
 		"--allow-no-changes",
 		"--force-bump-patch-version",
 		"--ci-condition=default",
 		"--provider=github",
-		"--provider-opt=slug="+repo,
-	).Run()
+		"--provider-opt=slug=" + repo,
+	}
+	if dry {
+		args = append(args, "--dry")
+	}
+	return sggosemanticrelease.Command(ctx, args...).Run()
 }
