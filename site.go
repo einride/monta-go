@@ -24,7 +24,7 @@ type Site struct {
 	Type ChargePointType `json:"type"`
 
 	// Visibility indicates if this site is public or private.
-	Visibility SiteVisibility `json:"siteVisibility"`
+	Visibility Visibility `json:"siteVisibility"`
 
 	// A Note you have entered for this site, e.g. via our Portal.
 	Note string `json:"note"`
