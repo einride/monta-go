@@ -77,7 +77,6 @@ func SemanticRelease(ctx context.Context, repo string, dry bool) error {
 	args := []string{
 		"--allow-initial-development-versions",
 		"--allow-no-changes",
-		"--force-bump-patch-version",
 		"--ci-condition=default",
 		"--provider=github",
 		"--provider-opt=slug=" + repo,
