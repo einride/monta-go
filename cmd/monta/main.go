@@ -20,6 +20,7 @@ func main() {
 	cmd.AddCommand(newMeCommand())
 	cmd.AddCommand(newListSitesCommand())
 	cmd.AddCommand(newListChargePointsCommand())
+	cmd.AddCommand(newListChargesCommand())
 	if err := cmd.Execute(); err != nil {
 		_, _ = fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
@@ -117,7 +118,7 @@ func newClientWithAuthentication(cmd *cobra.Command) (*monta.Client, error) {
 func newMeCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "me",
-		Short: "Obtain information about current API Consumer",
+		Short: "Get information about the current authenticated user",
 		Annotations: map[string]string{
 			apiCommandAnnotation: "GET /v1/auth/me",
 		},
@@ -148,7 +149,7 @@ func newMeCommand() *cobra.Command {
 func newListSitesCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "sites",
-		Short: "List your charge sites.",
+		Short: "List your charge sites",
 		Annotations: map[string]string{
 			apiCommandAnnotation: "GET /v1/sites",
 		},
@@ -211,7 +212,7 @@ func newListSitesCommand() *cobra.Command {
 func newListChargePointsCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "charge-points",
-		Short: "List your charge points.",
+		Short: "List your charge points",
 		Annotations: map[string]string{
 			apiCommandAnnotation: "GET /v1/charge-points",
 		},
@@ -229,7 +230,7 @@ func newListChargePointsCommand() *cobra.Command {
 		argumentFlagAnnotation: {},
 	}
 	siteID := cmd.Flags().Int64("site-id", 0, "site ID to filter by")
-	cmd.Flag("per-page").Annotations = map[string][]string{
+	cmd.Flag("site-id").Annotations = map[string][]string{
 		argumentFlagAnnotation: {},
 	}
 	cmd.RunE = func(cmd *cobra.Command, _ []string) error {
@@ -264,6 +265,84 @@ func newListChargePointsCommand() *cobra.Command {
 			}
 			for _, chargePoint := range response.ChargePoints {
 				data, err := json.MarshalIndent(chargePoint, "", "  ")
+				if err != nil {
+					return err
+				}
+				cmd.Println(string(data))
+			}
+			if *page >= int(response.PageMeta.TotalPageCount) {
+				break
+			}
+			*page = int(response.PageMeta.CurrentPage + 1)
+		}
+		return nil
+	}
+	return cmd
+}
+
+func newListChargesCommand() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "charges",
+		Short: "List your charging transactions",
+		Annotations: map[string]string{
+			apiCommandAnnotation: "GET /v1/charges",
+		},
+	}
+	cmd.SetHelpFunc(helpFunc)
+	cmd.SetUsageFunc(usageFunc)
+	cmd.SetOut(os.Stdout)
+	cmd.SetErr(os.Stderr)
+	page := cmd.Flags().Int("page", 0, "page number to retrieve")
+	cmd.Flag("page").Annotations = map[string][]string{
+		argumentFlagAnnotation: {},
+	}
+	perPage := cmd.Flags().Int("per-page", 10, "number of items per page")
+	cmd.Flag("per-page").Annotations = map[string][]string{
+		argumentFlagAnnotation: {},
+	}
+	teamID := cmd.Flags().Int64("team-id", 0, "team ID to filter by")
+	cmd.Flag("team-id").Annotations = map[string][]string{
+		argumentFlagAnnotation: {},
+	}
+	chargePointID := cmd.Flags().Int64("charge-point-id", 0, "charge point ID to filter by")
+	cmd.Flag("charge-point-id").Annotations = map[string][]string{
+		argumentFlagAnnotation: {},
+	}
+	cmd.RunE = func(cmd *cobra.Command, _ []string) error {
+		client, err := newClientWithAuthentication(cmd)
+		if err != nil {
+			return err
+		}
+		var allPages bool
+		if *page == 0 {
+			allPages = true
+			*page = 1
+		}
+		for {
+			request := &monta.ListChargesRequest{
+				Page:    *page,
+				PerPage: *perPage,
+			}
+			if cmd.Flags().Changed("team-id") {
+				request.TeamID = teamID
+			}
+			if cmd.Flags().Changed("charge-point-id") {
+				request.ChargePointID = chargePointID
+			}
+			response, err := client.ListCharges(cmd.Context(), request)
+			if err != nil {
+				return err
+			}
+			if !allPages {
+				data, err := json.MarshalIndent(response, "", "  ")
+				if err != nil {
+					return err
+				}
+				cmd.Println(string(data))
+				break
+			}
+			for _, charge := range response.Charges {
+				data, err := json.MarshalIndent(charge, "", "  ")
 				if err != nil {
 					return err
 				}
