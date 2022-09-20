@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -75,7 +74,6 @@ func (c *Client) ListWalletTransactions(
 		_ = httpResponse.Body.Close()
 	}()
 	if httpResponse.StatusCode != http.StatusOK {
-		log.Println(requestURL.String())
 		return nil, newStatusError(httpResponse)
 	}
 	var response ListWalletTransactionsResponse
