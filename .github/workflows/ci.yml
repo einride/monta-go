@@ -22,10 +22,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Dry-run goreleaser
-        uses: goreleaser/goreleaser-action@v2.9.1
-        with:
-          version: latest
-          args: release --rm-dist
+      - name: Dry-run GoReleaser
+        run: make go-releaser snapshot=true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

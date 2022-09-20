@@ -8,6 +8,7 @@ import (
 	"go.einride.tech/sage/tools/sggit"
 	"go.einride.tech/sage/tools/sggo"
 	"go.einride.tech/sage/tools/sggolangcilint"
+	"go.einride.tech/sage/tools/sggoreleaser"
 	"go.einride.tech/sage/tools/sggoreview"
 	"go.einride.tech/sage/tools/sggosemanticrelease"
 	"go.einride.tech/sage/tools/sgmarkdownfmt"
@@ -85,4 +86,16 @@ func SemanticRelease(ctx context.Context, repo string, dry bool) error {
 		args = append(args, "--dry")
 	}
 	return sggosemanticrelease.Command(ctx, args...).Run()
+}
+
+func GoReleaser(ctx context.Context, snapshot bool) error {
+	sg.Logger(ctx).Println("building Go binary releases...")
+	args := []string{
+		"release",
+		"--rm-dist",
+	}
+	if snapshot {
+		args = append(args, "--snapshot")
+	}
+	return sggoreleaser.Command(ctx, args...).Run()
 }
