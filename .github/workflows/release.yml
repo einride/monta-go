@@ -32,10 +32,7 @@ jobs:
         with:
           go-version: 1.19
 
-      - name: Run goreleaser
-        uses: goreleaser/goreleaser-action@v2.9.1
-        with:
-          version: latest
-          args: release --rm-dist
+      - name: Run GoReleaser
+        run: make go-releaser snapshot=false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

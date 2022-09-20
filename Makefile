@@ -67,6 +67,13 @@ go-lint: $(sagefile)
 go-mod-tidy: $(sagefile)
 	@$(sagefile) GoModTidy
 
+.PHONY: go-releaser
+go-releaser: $(sagefile)
+ifndef snapshot
+	 $(error missing argument snapshot="...")
+endif
+	@$(sagefile) GoReleaser "$(snapshot)"
+
 .PHONY: go-review
 go-review: $(sagefile)
 	@$(sagefile) GoReview
