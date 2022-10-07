@@ -22,6 +22,7 @@ func main() {
 	cmd.AddCommand(newListChargePointsCommand())
 	cmd.AddCommand(newListChargesCommand())
 	cmd.AddCommand(newListWalletTransactionsCommand())
+	cmd.AddCommand(newStartChargeCommand())
 	if err := cmd.Execute(); err != nil {
 		_, _ = fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
@@ -421,6 +422,55 @@ func newListWalletTransactionsCommand() *cobra.Command {
 		return nil
 	}
 	return cmd
+}
+
+func newStartChargeCommand() *cobra.Command {
+    cmd := &cobra.Command{
+        Use:   "start-charge",
+        Short: "Start a charge session",
+        Annotations: map[string]string{
+            apiCommandAnnotation: "POST /v1/charges",
+        },
+    }
+    cmd.SetHelpFunc(helpFunc)
+    cmd.SetUsageFunc(usageFunc)
+    cmd.SetOut(os.Stdout)
+    cmd.SetErr(os.Stderr)
+    payingTeamID := cmd.Flags().Int64("paying-team-id", 0, "the id of the team that will be paying for the charge")
+    cmd.Flag("paying-team-id").Annotations = map[string][]string{
+        argumentFlagAnnotation: {},
+    }
+    chargePointID := cmd.Flags().Int64("charge-point-id", 0, "id of the charge point used for this charge")
+    cmd.Flag("charge-point-id").Annotations = map[string][]string{
+        argumentFlagAnnotation: {},
+    }
+    reserveCharge := cmd.Flags().Bool("reserve-charge", false, `if true, a charge point will be reserved and a 
+	charge object with state reserved will be returned. Use restart endpoint to start the charge`)
+    cmd.Flag("reserve-charge").Annotations = map[string][]string{
+        argumentFlagAnnotation: {},
+    }
+    cmd.RunE = func(cmd *cobra.Command, _ []string) error {
+        client, err := newClientWithAuthentication(cmd)
+        if err != nil {
+            return err
+        }
+        request := &monta.StartChargeRequest{
+            PayingTeamID: *payingTeamID,
+            ChargePointID: *chargePointID,
+            ReserveCharge: *reserveCharge,
+        }
+        response, err := client.StartCharge(cmd.Context(), request)
+        if err != nil {
+            return err
+        }
+        data, err := json.MarshalIndent(response, "", "  ")
+        if err != nil {
+            return err
+        }
+        cmd.Println(string(data))
+        return nil
+    }
+    return cmd
 }
 
 func newLoginCommand() *cobra.Command {
