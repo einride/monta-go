@@ -118,7 +118,7 @@ func doGet[T any](ctx context.Context, client *Client, path string, query url.Va
 
 // Template method to execute POST requests towards monta
 func doPost[T any](ctx context.Context, client *Client, path string, body io.Reader) (_ *T, err error) {
-	return execute[T](ctx, client, http.MethodPost, path, url.Values{}, body)
+	return execute[T](ctx, client, http.MethodPost, path, nil, body)
 }
 
 // Template method to execute requests towards monta
