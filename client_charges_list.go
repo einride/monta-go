@@ -42,5 +42,5 @@ func (c *Client) ListCharges(ctx context.Context, request *ListChargesRequest) (
 	if request.ChargePointID != nil {
 		query.Set("chargePointId", strconv.Itoa(int(*request.ChargePointID)))
 	}
-	return listEntity[ListChargesResponse](ctx, c, path, query)
+	return doGet[ListChargesResponse](ctx, c, path, query)
 }

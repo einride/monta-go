@@ -40,5 +40,5 @@ func (c *Client) ListChargePoints(
 	if request.SiteID != nil {
 		query.Set("siteId", strconv.Itoa(int(*request.SiteID)))
 	}
-	return listEntity[ListChargePointsResponse](ctx, c, path, query)
+	return doGet[ListChargePointsResponse](ctx, c, path, query)
 }

@@ -111,7 +111,7 @@ func (c *Client) getToken(ctx context.Context) (_ *Token, err error) {
 }
 
 // Calls the given path and decode the response into the given type
-func getEntity[T any](ctx context.Context, client *Client, path string) (_ *T, err error) {
+func doGet[T any](ctx context.Context, client *Client, path string, query url.Values) (_ *T, err error) {
 	method := http.MethodGet
 	defer func() {
 		if err != nil {
@@ -122,43 +122,9 @@ func getEntity[T any](ctx context.Context, client *Client, path string) (_ *T, e
 	if err != nil {
 		return nil, err
 	}
-	httpRequest, err := http.NewRequestWithContext(ctx, method, requestURL.String(), nil)
-	if err != nil {
-		return nil, err
+	if len(query) > 0 {
+		requestURL.RawQuery = query.Encode()
 	}
-	if err := client.setAuthorization(ctx, httpRequest); err != nil {
-		return nil, err
-	}
-	httpResponse, err := client.httpClient.Do(httpRequest)
-	if err != nil {
-		return nil, err
-	}
-	defer func() {
-		_ = httpResponse.Body.Close()
-	}()
-	if httpResponse.StatusCode != http.StatusOK {
-		return nil, newStatusError(httpResponse)
-	}
-	var response T
-	if err := json.NewDecoder(httpResponse.Body).Decode(&response); err != nil {
-		return nil, err
-	}
-	return &response, nil
-}
-
-// Calls the given path and decode the response into the given type
-func listEntity[T any](ctx context.Context, client *Client, path string, query url.Values) (_ *T, err error) {
-	method := http.MethodGet
-	defer func() {
-		if err != nil {
-			err = fmt.Errorf("%s %s: %w", method, path, err)
-		}
-	}()
-	requestURL, err := url.Parse(apiHost + path)
-	if err != nil {
-		return nil, err
-	}
-	requestURL.RawQuery = query.Encode()
 	httpRequest, err := http.NewRequestWithContext(ctx, method, requestURL.String(), nil)
 	if err != nil {
 		return nil, err

@@ -32,5 +32,5 @@ func (c *Client) ListSites(ctx context.Context, request *ListSitesRequest) (*Lis
 	if request.PerPage > 0 {
 		query.Set("perPage", strconv.Itoa(request.PerPage))
 	}
-	return listEntity[ListSitesResponse](ctx, c, path, query)
+	return doGet[ListSitesResponse](ctx, c, path, query)
 }
