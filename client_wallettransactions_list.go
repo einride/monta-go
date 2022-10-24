@@ -46,5 +46,5 @@ func (c *Client) ListWalletTransactions(
 	if !request.ToDate.IsZero() {
 		query.Set("toDate", request.ToDate.UTC().Format(time.RFC3339))
 	}
-	return listEntity[ListWalletTransactionsResponse](ctx, c, path, query)
+	return doGet[ListWalletTransactionsResponse](ctx, c, path, query)
 }
