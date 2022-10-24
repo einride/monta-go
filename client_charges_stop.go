@@ -8,7 +8,7 @@ import (
 	"net/url"
 )
 
-// StopCharge stop a charge
+// StopCharge stop a charge.
 func (c *Client) StopCharge(ctx context.Context, chargeID int64) (_ *Charge, err error) {
 	method, path := http.MethodPost, fmt.Sprintf("/v1/charges/%d/stop", chargeID)
 	defer func() {

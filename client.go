@@ -110,7 +110,7 @@ func (c *Client) getToken(ctx context.Context) (_ *Token, err error) {
 	return createdToken, nil
 }
 
-// Calls the given path and decode the response into the given type
+// Calls the given path and decode the response into the given type.
 func doGet[T any](ctx context.Context, client *Client, path string, query url.Values) (_ *T, err error) {
 	method := http.MethodGet
 	defer func() {
