@@ -2,9 +2,6 @@ package monta
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
-	"net/http"
 	"net/url"
 	"strconv"
 	"time"
@@ -34,18 +31,9 @@ type ListWalletTransactionsResponse struct {
 func (c *Client) ListWalletTransactions(
 	ctx context.Context,
 	request *ListWalletTransactionsRequest,
-) (_ *ListWalletTransactionsResponse, err error) {
-	const method, path = http.MethodGet, "/v1/wallet-transactions"
-	defer func() {
-		if err != nil {
-			err = fmt.Errorf("%s %s: %w", method, path, err)
-		}
-	}()
-	requestURL, err := url.Parse(apiHost + path)
-	if err != nil {
-		return nil, err
-	}
-	query := requestURL.Query()
+) (*ListWalletTransactionsResponse, error) {
+	path := "/v1/wallet-transactions"
+	query := url.Values{}
 	if request.Page > 0 {
 		query.Set("page", strconv.Itoa(request.Page))
 	}
@@ -58,27 +46,5 @@ func (c *Client) ListWalletTransactions(
 	if !request.ToDate.IsZero() {
 		query.Set("toDate", request.ToDate.UTC().Format(time.RFC3339))
 	}
-	requestURL.RawQuery = query.Encode()
-	httpRequest, err := http.NewRequestWithContext(ctx, method, requestURL.String(), nil)
-	if err != nil {
-		return nil, err
-	}
-	if err := c.setAuthorization(ctx, httpRequest); err != nil {
-		return nil, err
-	}
-	httpResponse, err := c.httpClient.Do(httpRequest)
-	if err != nil {
-		return nil, err
-	}
-	defer func() {
-		_ = httpResponse.Body.Close()
-	}()
-	if httpResponse.StatusCode != http.StatusOK {
-		return nil, newStatusError(httpResponse)
-	}
-	var response ListWalletTransactionsResponse
-	if err := json.NewDecoder(httpResponse.Body).Decode(&response); err != nil {
-		return nil, err
-	}
-	return &response, nil
+	return listEntity[ListWalletTransactionsResponse](ctx, c, path, query)
 }
