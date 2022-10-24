@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 	"time"
@@ -110,9 +111,25 @@ func (c *Client) getToken(ctx context.Context) (_ *Token, err error) {
 	return createdToken, nil
 }
 
-// Calls the given path and decode the response into the given type.
+// Template method to execute GET requests towards monta
 func doGet[T any](ctx context.Context, client *Client, path string, query url.Values) (_ *T, err error) {
-	method := http.MethodGet
+	return execute[T](ctx, client, http.MethodGet, path, query, nil)
+}
+
+// Template method to execute POST requests towards monta
+func doPost[T any](ctx context.Context, client *Client, path string, body io.Reader) (_ *T, err error) {
+	return execute[T](ctx, client, http.MethodPost, path, url.Values{}, body)
+}
+
+// Template method to execute requests towards monta
+func execute[T any](
+	ctx context.Context,
+	client *Client,
+	method string,
+	path string,
+	query url.Values,
+	body io.Reader,
+) (_ *T, err error) {
 	defer func() {
 		if err != nil {
 			err = fmt.Errorf("%s %s: %w", method, path, err)
@@ -125,7 +142,7 @@ func doGet[T any](ctx context.Context, client *Client, path string, query url.Va
 	if len(query) > 0 {
 		requestURL.RawQuery = query.Encode()
 	}
-	httpRequest, err := http.NewRequestWithContext(ctx, method, requestURL.String(), nil)
+	httpRequest, err := http.NewRequestWithContext(ctx, method, requestURL.String(), body)
 	if err != nil {
 		return nil, err
 	}
