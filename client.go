@@ -111,17 +111,17 @@ func (c *Client) getToken(ctx context.Context) (_ *Token, err error) {
 	return createdToken, nil
 }
 
-// Template method to execute GET requests towards monta
-func doGet[T any](ctx context.Context, client *Client, path string, query url.Values) (_ *T, err error) {
+// Template method to execute GET requests towards monta.
+func doGet[T any](ctx context.Context, client *Client, path string, query url.Values) (*T, error) {
 	return execute[T](ctx, client, http.MethodGet, path, query, nil)
 }
 
-// Template method to execute POST requests towards monta
-func doPost[T any](ctx context.Context, client *Client, path string, body io.Reader) (_ *T, err error) {
+// Template method to execute POST requests towards monta.
+func doPost[T any](ctx context.Context, client *Client, path string, body io.Reader) (*T, error) {
 	return execute[T](ctx, client, http.MethodPost, path, nil, body)
 }
 
-// Template method to execute requests towards monta
+// Template method to execute requests towards monta.
 func execute[T any](
 	ctx context.Context,
 	client *Client,

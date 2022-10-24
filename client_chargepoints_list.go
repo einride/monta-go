@@ -28,7 +28,7 @@ type ListChargePointsResponse struct {
 func (c *Client) ListChargePoints(
 	ctx context.Context,
 	request *ListChargePointsRequest,
-) (_ *ListChargePointsResponse, err error) {
+) (*ListChargePointsResponse, error) {
 	path := "/v1/charge-points"
 	query := url.Values{}
 	if request.Page > 0 {
