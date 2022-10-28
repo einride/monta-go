@@ -22,10 +22,10 @@ type Address struct {
 	Address1 string `json:"address1"`
 
 	// Address2 is the second line of address (optional).
-	Address2 string `json:"address2"`
+	Address2 *string `json:"address2"`
 
 	// Address3 is the third line of address (optional).
-	Address3 string `json:"address3"`
+	Address3 *string `json:"address3"`
 
 	// Zip is the zip code of the address.
 	Zip string `json:"zip"`

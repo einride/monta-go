@@ -4,7 +4,6 @@ import "time"
 
 // Charge is a charging transaction.
 type Charge struct {
-
 	// ID of the charge
 	ID int64 `json:"id"`
 
@@ -57,13 +56,13 @@ type Charge struct {
 	AverageRenewablePerKWh *float64 `json:"averageRenewablePerKwh"`
 
 	// Failure reason for this charge
-	FailureReason string `json:"failureReason"`
+	FailureReason *string `json:"failureReason"`
 
 	// Payment method for this charge
-	PaymentMethod PaymentMethod `json:"paymentMethod"`
+	PaymentMethod *PaymentMethod `json:"paymentMethod"`
 
 	// A note taken for this charge
-	Note string `json:"note"`
+	Note *string `json:"note"`
 
 	// Configured Kwh limit for this charge
 	KWhLimit *float64 `json:"kwhLimit"`
