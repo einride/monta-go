@@ -3,16 +3,12 @@ package monta
 import (
 	"context"
 	"net/url"
-	"strconv"
 	"time"
 )
 
 // ListWalletTransactionsRequest is the request input to the [Client.ListWalletTransactions] method.
 type ListWalletTransactionsRequest struct {
-	// Page number to request (starts with 1).
-	Page int
-	// Number of items PerPage (between 1 and 100, default 10).
-	PerPage int
+	PageFilters
 	// FromDate allows to filter to retrieve transactions where [WalletTransaction.CreatedAt] >= FromDate.
 	FromDate time.Time
 	// ToDate allows to filter to retrieve transactions where [WalletTransaction.CreatedAt] <= ToDate.
@@ -34,12 +30,7 @@ func (c *Client) ListWalletTransactions(
 ) (*ListWalletTransactionsResponse, error) {
 	path := "/v1/wallet-transactions"
 	query := url.Values{}
-	if request.Page > 0 {
-		query.Set("page", strconv.Itoa(request.Page))
-	}
-	if request.PerPage > 0 {
-		query.Set("perPage", strconv.Itoa(request.PerPage))
-	}
+	request.PageFilters.Apply(query)
 	if !request.FromDate.IsZero() {
 		query.Set("fromDate", request.FromDate.UTC().Format(time.RFC3339))
 	}
