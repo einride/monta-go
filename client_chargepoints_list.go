@@ -8,10 +8,7 @@ import (
 
 // ListChargePointsRequest is the request input to the [Client.ListChargePoints] method.
 type ListChargePointsRequest struct {
-	// Page number to request (starts with 1).
-	Page int
-	// Number of items PerPage (between 1 and 100, default 10).
-	PerPage int
+	PageFilters
 	// SiteID allows to filter list of charge points by a site id.
 	SiteID *int64
 }
@@ -31,12 +28,7 @@ func (c *Client) ListChargePoints(
 ) (*ListChargePointsResponse, error) {
 	path := "/v1/charge-points"
 	query := url.Values{}
-	if request.Page > 0 {
-		query.Set("page", strconv.Itoa(request.Page))
-	}
-	if request.PerPage > 0 {
-		query.Set("perPage", strconv.Itoa(request.PerPage))
-	}
+	request.PageFilters.Apply(query)
 	if request.SiteID != nil {
 		query.Set("siteId", strconv.Itoa(int(*request.SiteID)))
 	}

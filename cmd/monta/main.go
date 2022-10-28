@@ -28,7 +28,10 @@ func main() {
 	}
 }
 
-const authConfigFile = "monta/auth.json"
+const (
+	authConfigFile = "monta/auth.json"
+	allPagesValue  = -1
+)
 
 const (
 	apiCommandAnnotation   = "monta_annotation_api_command"
@@ -159,7 +162,7 @@ func newListSitesCommand() *cobra.Command {
 	cmd.SetUsageFunc(usageFunc)
 	cmd.SetOut(os.Stdout)
 	cmd.SetErr(os.Stderr)
-	page := cmd.Flags().Int("page", 0, "page number to retrieve")
+	page := cmd.Flags().Int("page", allPagesValue, "page number to retrieve")
 	cmd.Flag("page").Annotations = map[string][]string{
 		argumentFlagAnnotation: {},
 	}
@@ -173,14 +176,16 @@ func newListSitesCommand() *cobra.Command {
 			return err
 		}
 		var allPages bool
-		if *page == 0 {
+		if *page == allPagesValue {
 			allPages = true
-			*page = 1
+			*page = 0
 		}
 		for {
 			response, err := client.ListSites(cmd.Context(), &monta.ListSitesRequest{
-				Page:    *page,
-				PerPage: *perPage,
+				PageFilters: monta.PageFilters{
+					Page:    *page,
+					PerPage: *perPage,
+				},
 			})
 			if err != nil {
 				return err
@@ -222,7 +227,7 @@ func newListChargePointsCommand() *cobra.Command {
 	cmd.SetUsageFunc(usageFunc)
 	cmd.SetOut(os.Stdout)
 	cmd.SetErr(os.Stderr)
-	page := cmd.Flags().Int("page", 0, "page number to retrieve")
+	page := cmd.Flags().Int("page", allPagesValue, "page number to retrieve")
 	cmd.Flag("page").Annotations = map[string][]string{
 		argumentFlagAnnotation: {},
 	}
@@ -240,14 +245,16 @@ func newListChargePointsCommand() *cobra.Command {
 			return err
 		}
 		var allPages bool
-		if *page == 0 {
+		if *page == allPagesValue {
 			allPages = true
-			*page = 1
+			*page = 0
 		}
 		for {
 			request := &monta.ListChargePointsRequest{
-				Page:    *page,
-				PerPage: *perPage,
+				PageFilters: monta.PageFilters{
+					Page:    *page,
+					PerPage: *perPage,
+				},
 			}
 			if cmd.Flags().Changed("site-id") {
 				request.SiteID = siteID
@@ -293,7 +300,7 @@ func newListChargesCommand() *cobra.Command {
 	cmd.SetUsageFunc(usageFunc)
 	cmd.SetOut(os.Stdout)
 	cmd.SetErr(os.Stderr)
-	page := cmd.Flags().Int("page", 0, "page number to retrieve")
+	page := cmd.Flags().Int("page", allPagesValue, "page number to retrieve")
 	cmd.Flag("page").Annotations = map[string][]string{
 		argumentFlagAnnotation: {},
 	}
@@ -315,14 +322,16 @@ func newListChargesCommand() *cobra.Command {
 			return err
 		}
 		var allPages bool
-		if *page == 0 {
+		if *page == allPagesValue {
 			allPages = true
-			*page = 1
+			*page = 0
 		}
 		for {
 			request := &monta.ListChargesRequest{
-				Page:    *page,
-				PerPage: *perPage,
+				PageFilters: monta.PageFilters{
+					Page:    *page,
+					PerPage: *perPage,
+				},
 			}
 			if cmd.Flags().Changed("team-id") {
 				request.TeamID = teamID
@@ -371,7 +380,7 @@ func newListWalletTransactionsCommand() *cobra.Command {
 	cmd.SetUsageFunc(usageFunc)
 	cmd.SetOut(os.Stdout)
 	cmd.SetErr(os.Stderr)
-	page := cmd.Flags().Int("page", 0, "page number to retrieve")
+	page := cmd.Flags().Int("page", allPagesValue, "page number to retrieve")
 	cmd.Flag("page").Annotations = map[string][]string{
 		argumentFlagAnnotation: {},
 	}
@@ -385,14 +394,16 @@ func newListWalletTransactionsCommand() *cobra.Command {
 			return err
 		}
 		var allPages bool
-		if *page == 0 {
+		if *page == allPagesValue {
 			allPages = true
-			*page = 1
+			*page = 0
 		}
 		for {
 			request := &monta.ListWalletTransactionsRequest{
-				Page:    *page,
-				PerPage: *perPage,
+				PageFilters: monta.PageFilters{
+					Page:    *page,
+					PerPage: *perPage,
+				},
 			}
 			response, err := client.ListWalletTransactions(cmd.Context(), request)
 			if err != nil {

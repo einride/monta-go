@@ -8,10 +8,7 @@ import (
 
 // ListChargesRequest is the request input to the [Client.ListCharges] method.
 type ListChargesRequest struct {
-	// Page number to request (starts with 1).
-	Page int
-	// Number of items PerPage (between 1 and 100, default 10).
-	PerPage int
+	PageFilters
 	// TeamID allows to filter list of charges points by a team ID.
 	TeamID *int64
 	// ChargePointID allows to filter list of charges points by a charge point ID.
@@ -30,12 +27,7 @@ type ListChargesResponse struct {
 func (c *Client) ListCharges(ctx context.Context, request *ListChargesRequest) (*ListChargesResponse, error) {
 	path := "/v1/charges"
 	query := url.Values{}
-	if request.Page > 0 {
-		query.Set("page", strconv.Itoa(request.Page))
-	}
-	if request.PerPage > 0 {
-		query.Set("perPage", strconv.Itoa(request.PerPage))
-	}
+	request.PageFilters.Apply(query)
 	if request.TeamID != nil {
 		query.Set("teamId", strconv.Itoa(int(*request.TeamID)))
 	}
