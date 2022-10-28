@@ -18,16 +18,16 @@ type Site struct {
 	AvailableChargePointCount int64 `json:"availableChargePointCount"`
 
 	// MaxKW available at this site.
-	MaxKW float64 `json:"maxKW"`
+	MaxKW *float64 `json:"maxKW"`
 
 	// Type of charge points at this site.
-	Type ChargePointType `json:"type"`
+	Type *ChargePointType `json:"type"`
 
 	// Visibility indicates if this site is public or private.
 	Visibility Visibility `json:"visibility"`
 
 	// A Note you have entered for this site, e.g. via our Portal.
-	Note string `json:"note"`
+	Note *string `json:"note"`
 
 	// Location of the site.
 	Location Location `json:"location"`
