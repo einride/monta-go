@@ -43,7 +43,9 @@ func TestChargePoint_MarshalJSON(t *testing.T) {
   "deeplinks": {
     "app": "http://example.com",
     "web": "http://example.com"
-  }
+  },
+  "createdAt": "2022-05-12T15:56:45.999189Z",
+  "updatedAt": "2022-05-17T15:56:45.999189Z"
 }
 	`)
 	var chargePoint ChargePoint

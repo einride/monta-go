@@ -39,7 +39,9 @@ func TestSite_MarshalJSON(t *testing.T) {
       "identifier": "ccs",
       "name": "CCS"
     }
-  ]
+  ],
+  "createdAt": "2022-05-12T15:56:45.999189Z",
+  "updatedAt": "2022-05-17T15:56:45.999189Z"
 }
 	`)
 	var site Site

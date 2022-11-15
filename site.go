@@ -1,5 +1,7 @@
 package monta
 
+import "time"
+
 // Site is a charging site.
 type Site struct {
 	// ID of the site.
@@ -34,4 +36,10 @@ type Site struct {
 
 	// Connectors is a list of supported connector types at this site.
 	Connectors []Connector `json:"connectors"`
+
+	// When the charging site was created
+	CreatedAt time.Time `json:"createdAt"`
+
+	// When the charging site was last updated
+	UpdatedAt time.Time `json:"updatedAt"`
 }

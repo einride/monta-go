@@ -1,5 +1,7 @@
 package monta
 
+import "time"
+
 // ChargePoint is a charging point.
 type ChargePoint struct {
 	// ID of this charge point
@@ -37,6 +39,12 @@ type ChargePoint struct {
 
 	// DeepLinks to the charge point.
 	DeepLinks ChargePointDeepLinks `json:"deeplinks"`
+
+	// When the charge point was created
+	CreatedAt time.Time `json:"createdAt"`
+
+	// When the charge point was last updated
+	UpdatedAt time.Time `json:"updatedAt"`
 }
 
 // ChargePointDeepLinks contains deep-links to a charge point.
