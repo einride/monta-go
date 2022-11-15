@@ -10,8 +10,11 @@ type Charge struct {
 	// ID of the charge point related to this charge
 	ChargePointID int64 `json:"chargePointId"`
 
-	// CreatedAt is the creation date of the charge.
+	// When the charge was created
 	CreatedAt time.Time `json:"createdAt"`
+
+	// When the charge was last updated
+	UpdatedAt time.Time `json:"updatedAt"`
 
 	// Date when cable was plugged in
 	CablePluggedInAt *time.Time `json:"cablePluggedInAt"`

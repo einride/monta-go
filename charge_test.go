@@ -14,6 +14,7 @@ func TestCharge_MarshalJSON(t *testing.T) {
   "id": 1,
   "chargePointId": 21,
   "createdAt": "2022-05-12T15:56:45.999189Z",
+  "updatedAt": "2022-05-17T15:56:45.999189Z",
   "cablePluggedInAt": "2022-05-12T15:56:45.999189Z",
   "startedAt": "2022-05-12T15:56:45.999189Z",
   "stoppedAt": "2022-05-12T15:56:45.999189Z",
