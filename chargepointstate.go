@@ -7,6 +7,7 @@ type ChargePointState string
 const (
 	ChargePointStateAvailable    ChargePointState = "available"
 	ChargePointStateBusy         ChargePointState = "busy"
+	ChargePointStateBusyCharging ChargePointState = "busy-charging"
 	ChargePointStateError        ChargePointState = "error"
 	ChargePointStateDisconnected ChargePointState = "disconnected"
 	ChargePointStatePassive      ChargePointState = "passive"
