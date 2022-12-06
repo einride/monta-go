@@ -4,14 +4,14 @@ updates:
   - package-ecosystem: gomod
     directory: .sage
     schedule:
-      interval: weekly
+      interval: "monthly"
 
   - package-ecosystem: gomod
     directory: /
     schedule:
-      interval: weekly
+      interval: "monthly"
 
   - package-ecosystem: gomod
     directory: cmd/monta
     schedule:
-      interval: weekly
+      interval: "monthly"
