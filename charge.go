@@ -75,4 +75,7 @@ type Charge struct {
 
 	// PayingTeam is the team paying for the charge.
 	PayingTeam *Team `json:"payingTeam"`
+
+	// ChargeAuth is the method used to authenticate the charge.
+	ChargeAuth *ChargeAuth `json:"chargeAuth"`
 }
