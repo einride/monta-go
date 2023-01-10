@@ -52,6 +52,9 @@ type WalletTransaction struct {
 	// Creation date of transaction
 	CreatedAt time.Time `json:"createdAt"`
 
+	// Update date of transaction
+	UpdatedAt time.Time `json:"updatedAt"`
+
 	// Reference type of this transaction.
 	ReferenceType string `json:"referenceType"`
 
