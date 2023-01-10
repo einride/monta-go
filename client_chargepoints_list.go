@@ -11,6 +11,8 @@ type ListChargePointsRequest struct {
 	PageFilters
 	// SiteID allows to filter list of charge points by a site id.
 	SiteID *int64
+	// TeamID allows to filter list of charge points by a team id.
+	TeamID *int64
 }
 
 // ListChargePointsResponse is the response output from the [Client.ListChargePoints] method.
@@ -31,6 +33,9 @@ func (c *Client) ListChargePoints(
 	request.PageFilters.Apply(query)
 	if request.SiteID != nil {
 		query.Set("siteId", strconv.Itoa(int(*request.SiteID)))
+	}
+	if request.TeamID != nil {
+		query.Set("teamId", strconv.Itoa(int(*request.TeamID)))
 	}
 	return doGet[ListChargePointsResponse](ctx, c, path, query)
 }

@@ -10,6 +10,9 @@ type ChargePoint struct {
 	// ID of the site
 	SiteID *int64 `json:"siteId"`
 
+	// ID of the team.
+	TeamID int64 `json:"teamId"`
+
 	// Serial number of this charge point
 	SerialNumber *string `json:"serialNumber"`
 

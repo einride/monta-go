@@ -13,6 +13,7 @@ func TestChargePoint_MarshalJSON(t *testing.T) {
 {
   "id": 1,
   "siteId": 42,
+  "teamId": 1,
   "serialNumber": "string",
   "name": "Monta CPH HQ",
   "visibility": "public",
