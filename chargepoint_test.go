@@ -20,6 +20,7 @@ func TestChargePoint_MarshalJSON(t *testing.T) {
   "type": "ac",
   "note": "In order to access this charge point enter 0000 as code at the gate.",
   "state": "available",
+  "lastMeterReadingKwh": 913.2,
   "location": {
     "coordinates": {
       "latitude": 55.6760968,
