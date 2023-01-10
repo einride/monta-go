@@ -31,6 +31,9 @@ type ChargePoint struct {
 	// State of the charge point.
 	State *ChargePointState `json:"state"`
 
+	// Last meter reading (KWH) for this charge point.
+	LastMeterReadingKwh *float64 `json:"lastMeterReadingKwh"`
+
 	// Location of the charge point.
 	Location Location `json:"location"`
 
