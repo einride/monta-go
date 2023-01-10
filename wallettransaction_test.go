@@ -38,6 +38,7 @@ func TestWalletTransaction_MarshalJSON(t *testing.T) {
   },
   "exchangeRate": 1,
   "createdAt": "2022-04-22T09:47:05Z",
+  "updatedAt": "2022-04-22T09:47:06Z",
   "referenceType": "SubscriptionPurchase",
   "group": "withdraw",
   "state": "complete",
