@@ -2,6 +2,7 @@ package monta
 
 import (
 	"context"
+	"fmt"
 	"net/url"
 )
 
@@ -24,4 +25,10 @@ func (c *Client) ListSites(ctx context.Context, request *ListSitesRequest) (*Lis
 	query := url.Values{}
 	request.PageFilters.Apply(query)
 	return doGet[ListSitesResponse](ctx, c, path, query)
+}
+
+// GetSite to retrieve a single (charge) site.
+func (c *Client) GetSite(ctx context.Context, siteID int64) (*Site, error) {
+	path := fmt.Sprintf("/v1/sites/%d", siteID)
+	return doGet[Site](ctx, c, path, nil)
 }

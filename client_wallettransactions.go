@@ -2,6 +2,7 @@ package monta
 
 import (
 	"context"
+	"fmt"
 	"net/url"
 	"time"
 )
@@ -38,4 +39,10 @@ func (c *Client) ListWalletTransactions(
 		query.Set("toDate", request.ToDate.UTC().Format(time.RFC3339))
 	}
 	return doGet[ListWalletTransactionsResponse](ctx, c, path, query)
+}
+
+// GetWalletTransaction to retrieve a single wallet transaction.
+func (c *Client) GetWalletTransaction(ctx context.Context, transactionID int64) (*WalletTransaction, error) {
+	path := fmt.Sprintf("/v1/wallet-transactions/%d", transactionID)
+	return doGet[WalletTransaction](ctx, c, path, nil)
 }

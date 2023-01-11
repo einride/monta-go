@@ -2,6 +2,7 @@ package monta
 
 import (
 	"context"
+	"fmt"
 	"net/url"
 	"strconv"
 )
@@ -33,4 +34,10 @@ func (c *Client) ListChargeAuthTokens(
 		query.Set("teamId", strconv.Itoa(int(*request.TeamID)))
 	}
 	return doGet[ListChargeAuthTokensResponse](ctx, c, path, query)
+}
+
+// GetChargeAuthToken to retrieve a single charge auth token.
+func (c *Client) GetChargeAuthToken(ctx context.Context, chargeAuthTokenID int64) (*ChargeAuthToken, error) {
+	path := fmt.Sprintf("/v1/chargeAuthTokens/%d", chargeAuthTokenID)
+	return doGet[ChargeAuthToken](ctx, c, path, nil)
 }
