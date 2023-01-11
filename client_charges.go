@@ -1,7 +1,10 @@
 package monta
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
+	"fmt"
 	"net/url"
 	"strconv"
 	"time"
@@ -42,6 +45,22 @@ type ListChargesResponse struct {
 	PageMeta PageMeta `json:"meta"`
 }
 
+// StartChargeRequest is the request input to the [Client.StartCharge] method.
+type StartChargeRequest struct {
+	// PayingTeamID is the ID of the team that will be paying for the charge.
+	PayingTeamID int64 `json:"payingTeamId"`
+	// ChargePointID is the ID of the charge point used for this charge.
+	ChargePointID int64 `json:"chargePointId"`
+	// ReserveCharge determines whether the charge point will be reserved or start the charge directly.
+	ReserveCharge bool `json:"reserveCharge"`
+}
+
+// StartChargeResponse is the response output from the [Client.StartCharge] method.
+type StartChargeResponse struct {
+	// Charge that started.
+	Charge Charge `json:"charge"`
+}
+
 // ListCharges to retrieve your charge points.
 func (c *Client) ListCharges(ctx context.Context, request *ListChargesRequest) (*ListChargesResponse, error) {
 	path := "/v1/charges"
@@ -69,4 +88,32 @@ func (c *Client) ListCharges(ctx context.Context, request *ListChargesRequest) (
 		query.Set("fromDate", request.FromDate.UTC().Format(time.RFC3339))
 	}
 	return doGet[ListChargesResponse](ctx, c, path, query)
+}
+
+// GetCharge to retrieve a single charge.
+func (c *Client) GetCharge(ctx context.Context, chargeID int64) (*Charge, error) {
+	path := fmt.Sprintf("/v1/charges/%d", chargeID)
+	return doGet[Charge](ctx, c, path, nil)
+}
+
+// StartCharge starts a charge.
+func (c *Client) StartCharge(ctx context.Context, request *StartChargeRequest) (*StartChargeResponse, error) {
+	path := "/v1/charges"
+	var requestBody bytes.Buffer
+	if err := json.NewEncoder(&requestBody).Encode(&request); err != nil {
+		return nil, err
+	}
+	return doPost[StartChargeResponse](ctx, c, path, &requestBody)
+}
+
+// StopCharge stop a charge.
+func (c *Client) StopCharge(ctx context.Context, chargeID int64) (*Charge, error) {
+	path := fmt.Sprintf("/v1/charges/%d/stop", chargeID)
+	return doPost[Charge](ctx, c, path, nil)
+}
+
+// RestartCharge restart or start a reserved charge.
+func (c *Client) RestartCharge(ctx context.Context, chargeID int64) (*Charge, error) {
+	path := fmt.Sprintf("/v1/charges/%d/restart", chargeID)
+	return doGet[Charge](ctx, c, path, nil)
 }
