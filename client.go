@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-const apiHost = "https://partner-api.monta.app/api"
+const apiHost = "https://partner-api.monta.com/api"
 
 // Client to the Monta Partner API.
 type Client struct {

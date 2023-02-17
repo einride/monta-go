@@ -27,7 +27,7 @@ func (c *Client) ListChargeAuthTokens(
 	ctx context.Context,
 	request *ListChargeAuthTokensRequest,
 ) (*ListChargeAuthTokensResponse, error) {
-	path := "/v1/chargeAuthTokens"
+	path := "/v1/charge-auth-tokens"
 	query := url.Values{}
 	request.PageFilters.Apply(query)
 	if request.TeamID != nil {
@@ -38,6 +38,6 @@ func (c *Client) ListChargeAuthTokens(
 
 // GetChargeAuthToken to retrieve a single charge auth token.
 func (c *Client) GetChargeAuthToken(ctx context.Context, chargeAuthTokenID int64) (*ChargeAuthToken, error) {
-	path := fmt.Sprintf("/v1/chargeAuthTokens/%d", chargeAuthTokenID)
+	path := fmt.Sprintf("/v1/charge-auth-tokens/%d", chargeAuthTokenID)
 	return doGet[ChargeAuthToken](ctx, c, path, nil)
 }
