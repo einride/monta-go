@@ -23,6 +23,12 @@ func TestCharge_MarshalJSON(t *testing.T) {
   "timeoutAt": "2022-05-12T15:56:45.999189Z",
   "state": "charging",
   "consumedKwh": 20.4,
+  "kwhPerHour": [
+    {
+      "time": "2022-05-12T15:00:00Z",
+      "value": 1.2
+    }
+  ],
   "startMeterKwh": 123.45,
   "endMeterKwh": 163.85,
   "price": 122.4,
