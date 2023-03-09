@@ -89,5 +89,5 @@ type KwhPerHour struct {
 	Time time.Time `json:"time"`
 
 	// Sum of kwh for this hour.
-	Value *float64 `json:"value"`
+	Value float64 `json:"value"`
 }
