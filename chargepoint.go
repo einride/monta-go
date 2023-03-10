@@ -4,7 +4,7 @@ import "time"
 
 // ChargePoint is a charging point.
 type ChargePoint struct {
-	// ID of this charge point
+	// ID of this charge point.
 	ID int64 `json:"id"`
 
 	// ID of the site
@@ -13,19 +13,19 @@ type ChargePoint struct {
 	// ID of the team.
 	TeamID int64 `json:"teamId"`
 
-	// Serial number of this charge point
+	// Serial number of this charge point.
 	SerialNumber *string `json:"serialNumber"`
 
-	// Name of the site
+	// Name of the site.
 	Name *string `json:"name"`
 
-	// Indicates if this charge point is public or private
+	// Indicates if this charge point is public or private.
 	Visibility Visibility `json:"visibility"`
 
 	// Max KW available at this charge point.
 	MaxKW *float64 `json:"maxKW"`
 
-	// Type of charge point (AC / DC)
+	// Type of charge point (AC / DC).
 	Type *ChargePointType `json:"type"`
 
 	// A note you have entered for this charge point, e.g. via our Portal.
@@ -46,10 +46,10 @@ type ChargePoint struct {
 	// DeepLinks to the charge point.
 	DeepLinks ChargePointDeepLinks `json:"deeplinks"`
 
-	// When the charge point was created
+	// When the charge point was created.
 	CreatedAt time.Time `json:"createdAt"`
 
-	// When the charge point was last updated
+	// When the charge point was last updated.
 	UpdatedAt time.Time `json:"updatedAt"`
 }
 
