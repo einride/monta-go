@@ -37,9 +37,9 @@ type Site struct {
 	// Connectors is a list of supported connector types at this site.
 	Connectors []Connector `json:"connectors"`
 
-	// When the charging site was created
+	// When the charging site was created.
 	CreatedAt time.Time `json:"createdAt"`
 
-	// When the charging site was last updated
+	// When the charging site was last updated.
 	UpdatedAt time.Time `json:"updatedAt"`
 }

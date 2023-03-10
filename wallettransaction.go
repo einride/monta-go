@@ -7,7 +7,7 @@ import (
 
 // WalletTransaction is a wallet transaction.
 type WalletTransaction struct {
-	// ID of the transaction
+	// ID of the transaction.
 	ID int64 `json:"id"`
 
 	// FromAmount is the amount sent from the sender.
@@ -49,16 +49,16 @@ type WalletTransaction struct {
 	// Exchange rate used for currency conversion.
 	ExchangeRate float64 `json:"exchangeRate"`
 
-	// Creation date of transaction
+	// Creation date of transaction.
 	CreatedAt time.Time `json:"createdAt"`
 
-	// Update date of transaction
+	// Update date of transaction.
 	UpdatedAt time.Time `json:"updatedAt"`
 
 	// Reference type of this transaction.
 	ReferenceType string `json:"referenceType"`
 
-	// Transaction group of this transaction
+	// Transaction group of this transaction.
 	Group TransactionGroup `json:"group"`
 
 	// Transaction state of this transaction
