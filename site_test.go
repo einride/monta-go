@@ -20,6 +20,7 @@ func TestSite_MarshalJSON(t *testing.T) {
   "type": "ac",
   "visibility": "public",
   "note": "In order to access this site enter 0000 as code at the gate.",
+  "partnerExternalId": "abc",
   "location": {
     "coordinates": {
       "latitude": 55.6760968,

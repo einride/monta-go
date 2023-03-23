@@ -7,4 +7,7 @@ type Team struct {
 
 	// Public name of the team.
 	PublicName string `json:"publicName"`
+
+	// External Id of this entity, managed by you.
+	PartnerExternalID *string `json:"partnerExternalId"`
 }
