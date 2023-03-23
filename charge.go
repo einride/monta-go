@@ -2,6 +2,15 @@ package monta
 
 import "time"
 
+// SoCSource source of the SoC.
+type SoCSource string
+
+// Known [SoCSource] values.
+const (
+	SoCSourceChargePoint   SoCSource = "charge-point"
+	SoCSourceChargeVehicle SoCSource = "vehicle"
+)
+
 // Charge is a charging transaction.
 type Charge struct {
 	// ID of the charge.
@@ -52,6 +61,9 @@ type Charge struct {
 	// Price for this charge.
 	Price *float64 `json:"price"`
 
+	// Configured price limit for this charge.
+	PriceLimit *float64 `json:"priceLimit"`
+
 	// Average price per Kwh.
 	AveragePricePerKWh *float64 `json:"averagePricePerKwh"`
 
@@ -81,6 +93,12 @@ type Charge struct {
 
 	// ChargeAuth is the method used to authenticate the charge.
 	ChargeAuth *ChargeAuth `json:"chargeAuth"`
+
+	// Information about the state of charge.
+	SoC *SoC `json:"soc"`
+
+	// Configured SoC limit for this charge.
+	SoCLimit *float64 `json:"socLimit"`
 }
 
 // Sum of kwh for a given hour.
@@ -90,4 +108,13 @@ type KwhPerHour struct {
 
 	// Sum of kwh for this hour.
 	Value float64 `json:"value"`
+}
+
+// Information about the state of charge if available.
+type SoC struct {
+	// Value of SoC in %
+	Percentage *float64 `json:"percentage"`
+
+	// Source of this value, eg vehicle or charge-point.
+	Source SoCSource `json:"source"`
 }
