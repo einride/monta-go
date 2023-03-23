@@ -31,6 +31,9 @@ type Site struct {
 	// A Note you have entered for this site, e.g. via our Portal.
 	Note *string `json:"note"`
 
+	// External Id of this entity, managed by you.
+	PartnerExternalID *string `json:"partnerExternalId"`
+
 	// Location of the site.
 	Location Location `json:"location"`
 

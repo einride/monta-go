@@ -14,6 +14,8 @@ type ChargeAuthToken struct {
 	TeamID int64 `json:"teamId"`
 	// Name of the charge auth token.
 	Name *string `json:"name"`
+	// External Id of this entity, managed by you.
+	PartnerExternalID *string `json:"partnerExternalId"`
 	// Blocked date of this charge auth token.
 	BlockedAt *time.Time `json:"blockedAt"`
 	// Creation date of this charge auth token.

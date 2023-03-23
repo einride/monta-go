@@ -47,7 +47,8 @@ func TestCharge_MarshalJSON(t *testing.T) {
   },
   "payingTeam": {
     "id": 14,
-    "publicName": "Monta HQ"
+    "publicName": "Monta HQ",
+    "partnerExternalId": "abc"
   },
   "chargeAuth": {
     "type": "vehicleId",

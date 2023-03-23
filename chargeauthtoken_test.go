@@ -16,6 +16,7 @@ func TestChargeAuthToken_MarshalJSON(t *testing.T) {
   "type": "vehicleId",
   "teamId": 13,
   "name": "Monta Team Key",
+  "partnerExternalId": "abc",
   "blockedAt": "2022-05-12T15:56:45.99Z",
   "createdAt": "2022-05-12T15:56:45.99Z",
   "updatedAt": "2022-05-12T16:56:45.99Z"

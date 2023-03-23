@@ -21,7 +21,8 @@ func TestWalletTransaction_MarshalJSON(t *testing.T) {
   "fromType": "team",
   "from": {
     "id": 14,
-    "publicName": "Monta"
+    "publicName": "Monta",
+    "partnerExternalId": "abcd"
   },
   "toAmount": 13.77,
   "toCurrency": {
@@ -48,8 +49,9 @@ func TestWalletTransaction_MarshalJSON(t *testing.T) {
 	var walletTransaction WalletTransaction
 	assert.NilError(t, json.Unmarshal([]byte(expected), &walletTransaction))
 	expectedFromTeam := &Team{
-		ID:         14,
-		PublicName: "Monta",
+		ID:                14,
+		PublicName:        "Monta",
+		PartnerExternalID: toPointer("abcd"),
 	}
 	assert.DeepEqual(t, expectedFromTeam, walletTransaction.FromTeam)
 	walletTransaction.From = nil
@@ -64,4 +66,8 @@ func TestWalletTransaction_MarshalJSON(t *testing.T) {
 	actual, err := json.MarshalIndent(&walletTransaction, "", "  ")
 	assert.NilError(t, err)
 	assert.Equal(t, expected, string(actual))
+}
+
+func toPointer[T any](v T) *T {
+	return &v
 }
