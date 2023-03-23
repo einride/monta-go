@@ -32,6 +32,7 @@ func TestCharge_MarshalJSON(t *testing.T) {
   "startMeterKwh": 123.45,
   "endMeterKwh": 163.85,
   "price": 122.4,
+  "priceLimit": 212,
   "averagePricePerKwh": 6,
   "averageCo2PerKwh": 100,
   "averageRenewablePerKwh": 72.5,
@@ -51,7 +52,12 @@ func TestCharge_MarshalJSON(t *testing.T) {
   "chargeAuth": {
     "type": "vehicleId",
     "id": "2C:54:91:88:C9:E3"
-  }
+  },
+  "soc": {
+    "percentage": 42.2,
+    "source": "vehicle"
+  },
+  "socLimit": 80
 }
 	`)
 	var charge Charge
