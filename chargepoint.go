@@ -37,6 +37,9 @@ type ChargePoint struct {
 	// Last meter reading (KWH) for this charge point.
 	LastMeterReadingKwh *float64 `json:"lastMeterReadingKwh"`
 
+	// Indicates if a cable is plugged in (true)
+	CablePluggedIn bool `json:"cablePluggedIn"`
+
 	// Location of the charge point.
 	Location Location `json:"location"`
 
