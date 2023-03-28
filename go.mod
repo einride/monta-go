@@ -1,6 +1,6 @@
 module go.einride.tech/monta
 
-go 1.19
+go 1.20
 
 require gotest.tools/v3 v3.3.0
 
