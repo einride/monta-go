@@ -25,7 +25,7 @@ type ListChargePointsResponse struct {
 }
 
 // ListChargePoints to retrieve your charge points.
-func (c *Client) ListChargePoints(
+func (c *clientImpl) ListChargePoints(
 	ctx context.Context,
 	request *ListChargePointsRequest,
 ) (*ListChargePointsResponse, error) {
@@ -42,7 +42,7 @@ func (c *Client) ListChargePoints(
 }
 
 // GetChargePoint to retrieve a single charge point.
-func (c *Client) GetChargePoint(ctx context.Context, chargePointID int64) (*ChargePoint, error) {
+func (c *clientImpl) GetChargePoint(ctx context.Context, chargePointID int64) (*ChargePoint, error) {
 	path := fmt.Sprintf("/v1/charge-points/%d", chargePointID)
 	return doGet[ChargePoint](ctx, c, path, nil)
 }

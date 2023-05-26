@@ -26,6 +26,6 @@ type Me struct {
 }
 
 // GetMe obtains information about current API consumer [Me].
-func (c *Client) GetMe(ctx context.Context) (*Me, error) {
+func (c *clientImpl) GetMe(ctx context.Context) (*Me, error) {
 	return doGet[Me](ctx, c, "/v1/auth/me", nil)
 }

@@ -23,7 +23,7 @@ type ListChargeAuthTokensResponse struct {
 }
 
 // ListChargeAuthTokens to retrieve your charge auth tokens.
-func (c *Client) ListChargeAuthTokens(
+func (c *clientImpl) ListChargeAuthTokens(
 	ctx context.Context,
 	request *ListChargeAuthTokensRequest,
 ) (*ListChargeAuthTokensResponse, error) {
@@ -37,7 +37,7 @@ func (c *Client) ListChargeAuthTokens(
 }
 
 // GetChargeAuthToken to retrieve a single charge auth token.
-func (c *Client) GetChargeAuthToken(ctx context.Context, chargeAuthTokenID int64) (*ChargeAuthToken, error) {
+func (c *clientImpl) GetChargeAuthToken(ctx context.Context, chargeAuthTokenID int64) (*ChargeAuthToken, error) {
 	path := fmt.Sprintf("/v1/charge-auth-tokens/%d", chargeAuthTokenID)
 	return doGet[ChargeAuthToken](ctx, c, path, nil)
 }
