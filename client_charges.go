@@ -62,7 +62,7 @@ type StartChargeResponse struct {
 }
 
 // ListCharges to retrieve your charge points.
-func (c *Client) ListCharges(ctx context.Context, request *ListChargesRequest) (*ListChargesResponse, error) {
+func (c *clientImpl) ListCharges(ctx context.Context, request *ListChargesRequest) (*ListChargesResponse, error) {
 	path := "/v1/charges"
 	query := url.Values{}
 	request.PageFilters.Apply(query)
@@ -91,13 +91,13 @@ func (c *Client) ListCharges(ctx context.Context, request *ListChargesRequest) (
 }
 
 // GetCharge to retrieve a single charge.
-func (c *Client) GetCharge(ctx context.Context, chargeID int64) (*Charge, error) {
+func (c *clientImpl) GetCharge(ctx context.Context, chargeID int64) (*Charge, error) {
 	path := fmt.Sprintf("/v1/charges/%d", chargeID)
 	return doGet[Charge](ctx, c, path, nil)
 }
 
 // StartCharge starts a charge.
-func (c *Client) StartCharge(ctx context.Context, request *StartChargeRequest) (*StartChargeResponse, error) {
+func (c *clientImpl) StartCharge(ctx context.Context, request *StartChargeRequest) (*StartChargeResponse, error) {
 	path := "/v1/charges"
 	var requestBody bytes.Buffer
 	if err := json.NewEncoder(&requestBody).Encode(&request); err != nil {
@@ -107,13 +107,13 @@ func (c *Client) StartCharge(ctx context.Context, request *StartChargeRequest) (
 }
 
 // StopCharge stop a charge.
-func (c *Client) StopCharge(ctx context.Context, chargeID int64) (*Charge, error) {
+func (c *clientImpl) StopCharge(ctx context.Context, chargeID int64) (*Charge, error) {
 	path := fmt.Sprintf("/v1/charges/%d/stop", chargeID)
 	return doPost[Charge](ctx, c, path, nil)
 }
 
 // RestartCharge restart or start a reserved charge.
-func (c *Client) RestartCharge(ctx context.Context, chargeID int64) (*Charge, error) {
+func (c *clientImpl) RestartCharge(ctx context.Context, chargeID int64) (*Charge, error) {
 	path := fmt.Sprintf("/v1/charges/%d/restart", chargeID)
 	return doGet[Charge](ctx, c, path, nil)
 }

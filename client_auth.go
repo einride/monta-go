@@ -36,7 +36,7 @@ type RefreshTokenRequest struct {
 }
 
 // CreateToken creates an authentication token.
-func (c *Client) CreateToken(ctx context.Context, request *CreateTokenRequest) (_ *Token, err error) {
+func (c *clientImpl) CreateToken(ctx context.Context, request *CreateTokenRequest) (_ *Token, err error) {
 	const method, path = http.MethodPost, "/v1/auth/token"
 	defer func() {
 		if err != nil {
@@ -70,7 +70,7 @@ func (c *Client) CreateToken(ctx context.Context, request *CreateTokenRequest) (
 }
 
 // RefreshToken creates an authentication token.
-func (c *Client) RefreshToken(ctx context.Context, request *RefreshTokenRequest) (_ *Token, err error) {
+func (c *clientImpl) RefreshToken(ctx context.Context, request *RefreshTokenRequest) (_ *Token, err error) {
 	const method, path = http.MethodPost, "/v1/auth/refresh"
 	defer func() {
 		if err != nil {

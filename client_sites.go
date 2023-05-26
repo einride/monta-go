@@ -20,7 +20,7 @@ type ListSitesResponse struct {
 }
 
 // ListSites to retrieve your (charge) sites.
-func (c *Client) ListSites(ctx context.Context, request *ListSitesRequest) (*ListSitesResponse, error) {
+func (c *clientImpl) ListSites(ctx context.Context, request *ListSitesRequest) (*ListSitesResponse, error) {
 	path := "/v1/sites"
 	query := url.Values{}
 	request.PageFilters.Apply(query)
@@ -28,7 +28,7 @@ func (c *Client) ListSites(ctx context.Context, request *ListSitesRequest) (*Lis
 }
 
 // GetSite to retrieve a single (charge) site.
-func (c *Client) GetSite(ctx context.Context, siteID int64) (*Site, error) {
+func (c *clientImpl) GetSite(ctx context.Context, siteID int64) (*Site, error) {
 	path := fmt.Sprintf("/v1/sites/%d", siteID)
 	return doGet[Site](ctx, c, path, nil)
 }

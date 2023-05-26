@@ -25,7 +25,7 @@ type ListWalletTransactionsResponse struct {
 }
 
 // ListWalletTransactions to retrieve your wallet transactions.
-func (c *Client) ListWalletTransactions(
+func (c *clientImpl) ListWalletTransactions(
 	ctx context.Context,
 	request *ListWalletTransactionsRequest,
 ) (*ListWalletTransactionsResponse, error) {
@@ -42,7 +42,7 @@ func (c *Client) ListWalletTransactions(
 }
 
 // GetWalletTransaction to retrieve a single wallet transaction.
-func (c *Client) GetWalletTransaction(ctx context.Context, transactionID int64) (*WalletTransaction, error) {
+func (c *clientImpl) GetWalletTransaction(ctx context.Context, transactionID int64) (*WalletTransaction, error) {
 	path := fmt.Sprintf("/v1/wallet-transactions/%d", transactionID)
 	return doGet[WalletTransaction](ctx, c, path, nil)
 }

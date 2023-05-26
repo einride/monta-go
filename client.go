@@ -12,7 +12,7 @@ import (
 
 const apiHost = "https://partner-api.monta.com/api"
 
-type ClientInterface interface {
+type Client interface {
 	GetMe(ctx context.Context) (*Me, error)
 
 	// Tokens
@@ -46,20 +46,23 @@ type ClientInterface interface {
 	GetWalletTransaction(ctx context.Context, transactionID int64) (*WalletTransaction, error)
 }
 
-// Client to the Monta Partner API.
-type Client struct {
+// clientImpl to the Monta Partner API.
+type clientImpl struct {
 	config         clientConfig
 	httpClient     *http.Client
 	tokenSemaphore chan struct{}
 	token          *Token
 }
 
+// Make sure we are implementing all methods.
+var _ Client = &clientImpl{}
+
 // ClientOption for configuring a [Client].
 type ClientOption func(*clientConfig)
 
 // NewClient creates a new [Client] with the provided [ClientConfig].
-func NewClient(options ...ClientOption) *Client {
-	client := &Client{
+func NewClient(options ...ClientOption) Client {
+	client := &clientImpl{
 		httpClient:     http.DefaultClient,
 		tokenSemaphore: make(chan struct{}, 1),
 	}
@@ -92,7 +95,7 @@ func WithToken(token *Token) ClientOption {
 	}
 }
 
-func (c *Client) setAuthorization(ctx context.Context, request *http.Request) error {
+func (c *clientImpl) setAuthorization(ctx context.Context, request *http.Request) error {
 	token, err := c.getToken(ctx)
 	if err != nil {
 		return err
@@ -101,7 +104,7 @@ func (c *Client) setAuthorization(ctx context.Context, request *http.Request) er
 	return nil
 }
 
-func (c *Client) getToken(ctx context.Context) (_ *Token, err error) {
+func (c *clientImpl) getToken(ctx context.Context) (_ *Token, err error) {
 	defer func() {
 		if err != nil {
 			err = fmt.Errorf("get token: %w", err)
@@ -146,19 +149,19 @@ func (c *Client) getToken(ctx context.Context) (_ *Token, err error) {
 }
 
 // Template method to execute GET requests towards monta.
-func doGet[T any](ctx context.Context, client *Client, path string, query url.Values) (*T, error) {
+func doGet[T any](ctx context.Context, client *clientImpl, path string, query url.Values) (*T, error) {
 	return execute[T](ctx, client, http.MethodGet, path, query, nil)
 }
 
 // Template method to execute POST requests towards monta.
-func doPost[T any](ctx context.Context, client *Client, path string, body io.Reader) (*T, error) {
+func doPost[T any](ctx context.Context, client *clientImpl, path string, body io.Reader) (*T, error) {
 	return execute[T](ctx, client, http.MethodPost, path, nil, body)
 }
 
 // Template method to execute requests towards monta.
 func execute[T any](
 	ctx context.Context,
-	client *Client,
+	client *clientImpl,
 	method string,
 	path string,
 	query url.Values,

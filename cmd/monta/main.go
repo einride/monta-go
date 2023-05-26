@@ -68,7 +68,7 @@ func newMontaCommand() *cobra.Command {
 	return cmd
 }
 
-func newClientWithAuthentication(cmd *cobra.Command) (*monta.Client, error) {
+func newClientWithAuthentication(cmd *cobra.Command) (monta.Client, error) {
 	var options []monta.ClientOption
 	if cmd.Flags().Changed("client-id") && cmd.Flags().Changed("client-secret") {
 		clientID, err := cmd.Flags().GetString("client-id")
