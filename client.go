@@ -12,6 +12,40 @@ import (
 
 const apiHost = "https://partner-api.monta.com/api"
 
+type ClientInterface interface {
+	GetMe(ctx context.Context) (*Me, error)
+
+	// Tokens
+	CreateToken(ctx context.Context, request *CreateTokenRequest) (*Token, error)
+	RefreshToken(ctx context.Context, request *RefreshTokenRequest) (*Token, error)
+
+	// Charge Auth Tokens
+	ListChargeAuthTokens(ctx context.Context, request *ListChargeAuthTokensRequest) (*ListChargeAuthTokensResponse, error)
+	GetChargeAuthToken(ctx context.Context, chargeAuthTokenID int64) (*ChargeAuthToken, error)
+
+	// Charge Points
+	ListChargePoints(ctx context.Context, request *ListChargePointsRequest) (*ListChargePointsResponse, error)
+	GetChargePoint(ctx context.Context, chargePointID int64) (*ChargePoint, error)
+
+	// Charges
+	ListCharges(ctx context.Context, request *ListChargesRequest) (*ListChargesResponse, error)
+	GetCharge(ctx context.Context, chargeID int64) (*Charge, error)
+	StartCharge(ctx context.Context, request *StartChargeRequest) (*StartChargeResponse, error)
+	StopCharge(ctx context.Context, chargeID int64) (*Charge, error)
+	RestartCharge(ctx context.Context, chargeID int64) (*Charge, error)
+
+	// Sites
+	ListSites(ctx context.Context, request *ListSitesRequest) (*ListSitesResponse, error)
+	GetSite(ctx context.Context, siteID int64) (*Site, error)
+
+	// Wallet Transactions
+	ListWalletTransactions(
+		ctx context.Context,
+		request *ListWalletTransactionsRequest,
+	) (*ListWalletTransactionsResponse, error)
+	GetWalletTransaction(ctx context.Context, transactionID int64) (*WalletTransaction, error)
+}
+
 // Client to the Monta Partner API.
 type Client struct {
 	config         clientConfig
