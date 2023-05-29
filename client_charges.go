@@ -61,7 +61,7 @@ type StartChargeResponse struct {
 	Charge Charge `json:"charge"`
 }
 
-// ListCharges to retrieve your charge points.
+// ListCharges to retrieve your charges.
 func (c *clientImpl) ListCharges(ctx context.Context, request *ListChargesRequest) (*ListChargesResponse, error) {
 	path := "/v1/charges"
 	query := url.Values{}
@@ -106,13 +106,13 @@ func (c *clientImpl) StartCharge(ctx context.Context, request *StartChargeReques
 	return doPost[StartChargeResponse](ctx, c, path, &requestBody)
 }
 
-// StopCharge stop a charge.
+// StopCharge stops a charge.
 func (c *clientImpl) StopCharge(ctx context.Context, chargeID int64) (*Charge, error) {
 	path := fmt.Sprintf("/v1/charges/%d/stop", chargeID)
 	return doPost[Charge](ctx, c, path, nil)
 }
 
-// RestartCharge restart or start a reserved charge.
+// RestartCharge restarts or starts a reserved charge.
 func (c *clientImpl) RestartCharge(ctx context.Context, chargeID int64) (*Charge, error) {
 	path := fmt.Sprintf("/v1/charges/%d/restart", chargeID)
 	return doGet[Charge](ctx, c, path, nil)
