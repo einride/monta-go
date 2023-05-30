@@ -77,3 +77,9 @@ func (c *clientImpl) GetChargeAuthToken(ctx context.Context, chargeAuthTokenID i
 	path := fmt.Sprintf("/v1/charge-auth-tokens/%d", chargeAuthTokenID)
 	return doGet[ChargeAuthToken](ctx, c, path, nil)
 }
+
+// DeleteChargeAuthToken to delete a charge auth token.
+func (c *clientImpl) DeleteChargeAuthToken(ctx context.Context, chargeAuthTokenID int64) error {
+	path := fmt.Sprintf("/v1/charge-auth-tokens/%d", chargeAuthTokenID)
+	return doDelete(ctx, c, path)
+}

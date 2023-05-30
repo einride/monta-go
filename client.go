@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"time"
@@ -23,6 +24,7 @@ type Client interface {
 	ListChargeAuthTokens(ctx context.Context, request *ListChargeAuthTokensRequest) (*ListChargeAuthTokensResponse, error)
 	GetChargeAuthToken(ctx context.Context, chargeAuthTokenID int64) (*ChargeAuthToken, error)
 	CreateChargeAuthToken(ctx context.Context, request CreateChargeAuthTokenRequest) (*ChargeAuthToken, error)
+	DeleteChargeAuthToken(ctx context.Context, chargeAuthTokenID int64) error
 
 	// Charge Points
 	ListChargePoints(ctx context.Context, request *ListChargePointsRequest) (*ListChargePointsResponse, error)
@@ -159,6 +161,12 @@ func doPost[T any](ctx context.Context, client *clientImpl, path string, body io
 	return execute[T](ctx, client, http.MethodPost, path, nil, body)
 }
 
+// Template method to execute DELETE requests towards monta.
+func doDelete(ctx context.Context, client *clientImpl, path string) error {
+	_, err := execute[any](ctx, client, http.MethodDelete, path, nil, nil)
+	return err
+}
+
 // Template method to execute requests towards monta.
 func execute[T any](
 	ctx context.Context,
@@ -197,9 +205,13 @@ func execute[T any](
 	if httpResponse.StatusCode != http.StatusOK {
 		return nil, newStatusError(httpResponse)
 	}
-	var response T
-	if err := json.NewDecoder(httpResponse.Body).Decode(&response); err != nil {
+	respBody, err := ioutil.ReadAll(httpResponse.Body)
+	if err != nil {
 		return nil, err
 	}
-	return &response, nil
+	if len(respBody) == 0 {
+		return nil, nil
+	}
+	var response T
+	return &response, json.Unmarshal(respBody, &response)
 }
