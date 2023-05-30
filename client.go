@@ -22,6 +22,7 @@ type Client interface {
 	// Charge Auth Tokens
 	ListChargeAuthTokens(ctx context.Context, request *ListChargeAuthTokensRequest) (*ListChargeAuthTokensResponse, error)
 	GetChargeAuthToken(ctx context.Context, chargeAuthTokenID int64) (*ChargeAuthToken, error)
+	CreateChargeAuthToken(ctx context.Context, request CreateChargeAuthTokenRequest) (*ChargeAuthToken, error)
 
 	// Charge Points
 	ListChargePoints(ctx context.Context, request *ListChargePointsRequest) (*ListChargePointsResponse, error)
