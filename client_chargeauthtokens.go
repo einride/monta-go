@@ -30,6 +30,12 @@ type CreateChargeAuthTokenRequest struct {
 	ActiveUntil *time.Time `json:"activeUntil"`
 }
 
+// PatchChargeAuthTokenRequest is the request input to the [Client.PatchChargeAuthToken] method.
+type PatchChargeAuthTokenRequest struct {
+	// External Id of this entity, managed by you.
+	PartnerExternalID *string `json:"partnerExternalId,omitempty"`
+}
+
 // ListChargeAuthTokensRequest is the request input to the [Client.ListChargeAuthTokens] method.
 type ListChargeAuthTokensRequest struct {
 	PageFilters
@@ -56,6 +62,20 @@ func (c *clientImpl) CreateChargeAuthToken(
 		return nil, err
 	}
 	return doPost[ChargeAuthToken](ctx, c, path, &requestBody)
+}
+
+// PatchChargeAuthToken to patch a charge auth token.
+func (c *clientImpl) PatchChargeAuthToken(
+	ctx context.Context,
+	chargeAuthTokenID int64,
+	request PatchChargeAuthTokenRequest,
+) (*ChargeAuthToken, error) {
+	path := fmt.Sprintf("/v1/charge-auth-tokens/%d", chargeAuthTokenID)
+	var requestBody bytes.Buffer
+	if err := json.NewEncoder(&requestBody).Encode(&request); err != nil {
+		return nil, err
+	}
+	return doPatch[ChargeAuthToken](ctx, c, path, &requestBody)
 }
 
 // ListChargeAuthTokens to retrieve your charge auth tokens.

@@ -25,6 +25,11 @@ type Client interface {
 	GetChargeAuthToken(ctx context.Context, chargeAuthTokenID int64) (*ChargeAuthToken, error)
 	CreateChargeAuthToken(ctx context.Context, request CreateChargeAuthTokenRequest) (*ChargeAuthToken, error)
 	DeleteChargeAuthToken(ctx context.Context, chargeAuthTokenID int64) error
+	PatchChargeAuthToken(
+		ctx context.Context,
+		chargeAuthTokenID int64,
+		request PatchChargeAuthTokenRequest,
+	) (*ChargeAuthToken, error)
 
 	// Charge Points
 	ListChargePoints(ctx context.Context, request *ListChargePointsRequest) (*ListChargePointsResponse, error)
@@ -159,6 +164,11 @@ func doGet[T any](ctx context.Context, client *clientImpl, path string, query ur
 // Template method to execute POST requests towards monta.
 func doPost[T any](ctx context.Context, client *clientImpl, path string, body io.Reader) (*T, error) {
 	return execute[T](ctx, client, http.MethodPost, path, nil, body)
+}
+
+// Template method to execute PATCH requests towards monta.
+func doPatch[T any](ctx context.Context, client *clientImpl, path string, body io.Reader) (*T, error) {
+	return execute[T](ctx, client, http.MethodPatch, path, nil, body)
 }
 
 // Template method to execute DELETE requests towards monta.
