@@ -10,9 +10,12 @@ import (
 	"time"
 )
 
+//nolint:gosec
+const chargeAuthTokenBasePath = "/v1/charge-auth-tokens"
+
 // CreateChargeAuthTokenRequest is the request input to the [Client.CreateChargeAuthToken] method.
 type CreateChargeAuthTokenRequest struct {
-	// Id of the team the charge auth token belongs.
+	// Id of the team the charge auth token belongs to.
 	TeamID int64 `json:"teamId"`
 	// Id of the user the charge auth token should be associated to.
 	UserID *int64 `json:"userId"`
@@ -26,7 +29,7 @@ type CreateChargeAuthTokenRequest struct {
 	MontaNetwork bool `json:"montaNetwork"`
 	// If the charge auth token should be active in the Roaming network.
 	RoamingNetwork bool `json:"roamingNetwork"`
-	// Until when the charge auth token should be active, when null it will be active forever.
+	// Until when the charge auth token should be active, when nil it will be active forever.
 	ActiveUntil *time.Time `json:"activeUntil"`
 }
 
@@ -56,12 +59,11 @@ func (c *clientImpl) CreateChargeAuthToken(
 	ctx context.Context,
 	request CreateChargeAuthTokenRequest,
 ) (*ChargeAuthToken, error) {
-	path := "/v1/charge-auth-tokens"
 	var requestBody bytes.Buffer
 	if err := json.NewEncoder(&requestBody).Encode(&request); err != nil {
 		return nil, err
 	}
-	return doPost[ChargeAuthToken](ctx, c, path, &requestBody)
+	return doPost[ChargeAuthToken](ctx, c, chargeAuthTokenBasePath, &requestBody)
 }
 
 // PatchChargeAuthToken to patch a charge auth token.
@@ -70,7 +72,7 @@ func (c *clientImpl) PatchChargeAuthToken(
 	chargeAuthTokenID int64,
 	request PatchChargeAuthTokenRequest,
 ) (*ChargeAuthToken, error) {
-	path := fmt.Sprintf("/v1/charge-auth-tokens/%d", chargeAuthTokenID)
+	path := fmt.Sprintf("%s/%d", chargeAuthTokenBasePath, chargeAuthTokenID)
 	var requestBody bytes.Buffer
 	if err := json.NewEncoder(&requestBody).Encode(&request); err != nil {
 		return nil, err
@@ -83,23 +85,22 @@ func (c *clientImpl) ListChargeAuthTokens(
 	ctx context.Context,
 	request *ListChargeAuthTokensRequest,
 ) (*ListChargeAuthTokensResponse, error) {
-	path := "/v1/charge-auth-tokens"
 	query := url.Values{}
 	request.PageFilters.Apply(query)
 	if request.TeamID != nil {
 		query.Set("teamId", strconv.Itoa(int(*request.TeamID)))
 	}
-	return doGet[ListChargeAuthTokensResponse](ctx, c, path, query)
+	return doGet[ListChargeAuthTokensResponse](ctx, c, chargeAuthTokenBasePath, query)
 }
 
 // GetChargeAuthToken to retrieve a single charge auth token.
 func (c *clientImpl) GetChargeAuthToken(ctx context.Context, chargeAuthTokenID int64) (*ChargeAuthToken, error) {
-	path := fmt.Sprintf("/v1/charge-auth-tokens/%d", chargeAuthTokenID)
+	path := fmt.Sprintf("%s/%d", chargeAuthTokenBasePath, chargeAuthTokenID)
 	return doGet[ChargeAuthToken](ctx, c, path, nil)
 }
 
 // DeleteChargeAuthToken to delete a charge auth token.
 func (c *clientImpl) DeleteChargeAuthToken(ctx context.Context, chargeAuthTokenID int64) error {
-	path := fmt.Sprintf("/v1/charge-auth-tokens/%d", chargeAuthTokenID)
+	path := fmt.Sprintf("%s/%d", chargeAuthTokenBasePath, chargeAuthTokenID)
 	return doDelete(ctx, c, path)
 }
