@@ -109,7 +109,7 @@ func (c *clientImpl) StartCharge(ctx context.Context, request *StartChargeReques
 // StopCharge stops a charge.
 func (c *clientImpl) StopCharge(ctx context.Context, chargeID int64) (*Charge, error) {
 	path := fmt.Sprintf("/v1/charges/%d/stop", chargeID)
-	return doPost[Charge](ctx, c, path, nil)
+	return doGet[Charge](ctx, c, path, nil)
 }
 
 // RestartCharge restarts or starts a reserved charge.
