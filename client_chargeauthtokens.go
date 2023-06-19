@@ -8,6 +8,9 @@ import (
 	"net/url"
 	"strconv"
 	"time"
+
+	"go.einride.tech/cloudrunner/cloudzap"
+	"go.uber.org/zap"
 )
 
 //nolint:gosec
@@ -59,10 +62,17 @@ func (c *clientImpl) CreateChargeAuthToken(
 	ctx context.Context,
 	request CreateChargeAuthTokenRequest,
 ) (*ChargeAuthToken, error) {
+	logger, ok := cloudzap.GetLogger(ctx)
+	if !ok {
+		logger = zap.NewNop()
+	}
+	logger.Debug("monta-go create charge auth token request", zap.Any("req", request))
 	var requestBody bytes.Buffer
 	if err := json.NewEncoder(&requestBody).Encode(&request); err != nil {
+		logger.Debug("monta-go encode error", zap.Error(err))
 		return nil, err
 	}
+	logger.Debug("monta-go create charge auth token request body", zap.Any("reqBody", &requestBody))
 	return doPost[ChargeAuthToken](ctx, c, chargeAuthTokenBasePath, &requestBody)
 }
 

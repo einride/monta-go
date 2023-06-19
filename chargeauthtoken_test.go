@@ -1,6 +1,8 @@
 package monta
 
 import (
+	"bytes"
+	"context"
 	"encoding/json"
 	"strings"
 	"testing"
@@ -27,4 +29,27 @@ func TestChargeAuthToken_MarshalJSON(t *testing.T) {
 	actual, err := json.MarshalIndent(&token, "", "  ")
 	assert.NilError(t, err)
 	assert.Equal(t, expected, string(actual))
+}
+
+func TestChargeAuthToken_JSONEncode(t *testing.T) {
+	request := CreateChargeAuthTokenRequest{
+		TeamID:         239264,
+		UserID:         nil,
+		Identifier:     "testkey",
+		Type:           "rfid",
+		Name:           new(string),
+		MontaNetwork:   false,
+		RoamingNetwork: false,
+	}
+	var requestBody bytes.Buffer
+	err := json.NewEncoder(&requestBody).Encode(&request)
+	assert.NilError(t, err)
+	var tokenRequest CreateChargeAuthTokenRequest
+	res, err := doPatch[ChargeAuthToken](context.TODO(), c, path, &requestBody)
+	c.Clie
+
+	// assert.NilError(t, json.Unmarshal(requestBody, &tokenRequest))
+	// actual, err := json.MarshalIndent(&token, "", "  ")
+	// assert.NilError(t, err)
+	// assert.Equal(t, expected, string(actual))
 }
