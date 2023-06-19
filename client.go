@@ -158,22 +158,22 @@ func (c *clientImpl) getToken(ctx context.Context) (_ *Token, err error) {
 
 // Template method to execute GET requests towards monta.
 func doGet[T any](ctx context.Context, client *clientImpl, path string, query url.Values) (*T, error) {
-	return execute[T](ctx, client, http.MethodGet, path, query, nil)
+	return execute[T](ctx, client, http.MethodGet, path, query, nil, nil)
 }
 
 // Template method to execute POST requests towards monta.
 func doPost[T any](ctx context.Context, client *clientImpl, path string, body io.Reader) (*T, error) {
-	return execute[T](ctx, client, http.MethodPost, path, nil, body)
+	return execute[T](ctx, client, http.MethodPost, path, nil, &http.Header{"content-type": {"application/json"}}, body)
 }
 
 // Template method to execute PATCH requests towards monta.
 func doPatch[T any](ctx context.Context, client *clientImpl, path string, body io.Reader) (*T, error) {
-	return execute[T](ctx, client, http.MethodPatch, path, nil, body)
+	return execute[T](ctx, client, http.MethodPatch, path, nil, nil, body)
 }
 
 // Template method to execute DELETE requests towards monta.
 func doDelete(ctx context.Context, client *clientImpl, path string) error {
-	_, err := execute[any](ctx, client, http.MethodDelete, path, nil, nil)
+	_, err := execute[any](ctx, client, http.MethodDelete, path, nil, nil, nil)
 	return err
 }
 
@@ -184,6 +184,7 @@ func execute[T any](
 	method string,
 	path string,
 	query url.Values,
+	headers *http.Header,
 	body io.Reader,
 ) (_ *T, err error) {
 	defer func() {
@@ -202,6 +203,9 @@ func execute[T any](
 	if err != nil {
 		return nil, err
 	}
+	if headers != nil {
+		httpRequest.Header = *headers
+	}
 	if err := client.setAuthorization(ctx, httpRequest); err != nil {
 		return nil, err
 	}
@@ -212,7 +216,7 @@ func execute[T any](
 	defer func() {
 		_ = httpResponse.Body.Close()
 	}()
-	if httpResponse.StatusCode != http.StatusOK {
+	if httpResponse.StatusCode != http.StatusOK && httpResponse.StatusCode != http.StatusCreated {
 		return nil, newStatusError(httpResponse)
 	}
 	respBody, err := ioutil.ReadAll(httpResponse.Body)
