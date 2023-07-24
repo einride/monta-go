@@ -37,6 +37,7 @@ func TestCharge_MarshalJSON(t *testing.T) {
   "averageCo2PerKwh": 100,
   "averageRenewablePerKwh": 72.5,
   "failureReason": "Some reason why we couldn't charge.",
+  "stopReason": "Some reason why the charge stopped.",
   "paymentMethod": "free",
   "note": "Lorem Ipsum",
   "kwhLimit": 21,
