@@ -76,6 +76,9 @@ type Charge struct {
 	// Failure reason for this charge.
 	FailureReason *string `json:"failureReason"`
 
+	// Stop reason for this charge.
+	StopReason *string `json:"stopReason"`
+
 	// Payment method for this charge.
 	PaymentMethod *PaymentMethod `json:"paymentMethod"`
 
