@@ -58,6 +58,9 @@ type WalletTransaction struct {
 	// Reference type of this transaction.
 	ReferenceType string `json:"referenceType"`
 
+	// Reference id of this transaction.
+	ReferenceID string `json:"referenceId"`
+
 	// Transaction group of this transaction.
 	Group TransactionGroup `json:"group"`
 

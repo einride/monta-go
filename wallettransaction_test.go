@@ -41,6 +41,7 @@ func TestWalletTransaction_MarshalJSON(t *testing.T) {
   "createdAt": "2022-04-22T09:47:05Z",
   "updatedAt": "2022-04-22T09:47:06Z",
   "referenceType": "SubscriptionPurchase",
+  "referenceId": "4908086",
   "group": "withdraw",
   "state": "complete",
   "note": "Test transaction."
