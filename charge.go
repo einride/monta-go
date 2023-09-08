@@ -92,7 +92,7 @@ type Charge struct {
 	Currency *Currency `json:"currency"`
 
 	// PayingTeam is the team paying for the charge.
-	PayingTeam *Team `json:"payingTeam"`
+	PayingTeam *PayingTeam `json:"payingTeam"`
 
 	// ChargeAuth is the method used to authenticate the charge.
 	ChargeAuth *ChargeAuth `json:"chargeAuth"`
