@@ -52,6 +52,12 @@ type Client interface {
 		request *ListWalletTransactionsRequest,
 	) (*ListWalletTransactionsResponse, error)
 	GetWalletTransaction(ctx context.Context, transactionID int64) (*WalletTransaction, error)
+
+	// Teams
+	ListTeams(
+		ctx context.Context,
+		request *ListTeamsRequest,
+	) (*ListTeamsResponse, error)
 }
 
 // clientImpl to the Monta Partner API.

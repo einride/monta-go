@@ -23,7 +23,7 @@ type WalletTransaction struct {
 	From json.RawMessage `json:"from"`
 
 	// FromTeam holds the parsed value of From when [FromType] is [TypeTeam].
-	FromTeam *Team `json:"-"`
+	FromTeam *PayingTeam `json:"-"`
 
 	// FromOperator holds the parsed value of From when [FromType] is [TypeOperator].
 	FromOperator *Operator `json:"-"`
@@ -44,7 +44,7 @@ type WalletTransaction struct {
 	ToOperator *Operator `json:"-"`
 
 	// ToTeam is used when [ToType] is "team".
-	ToTeam *Team `json:"-"`
+	ToTeam *PayingTeam `json:"-"`
 
 	// Exchange rate used for currency conversion.
 	ExchangeRate float64 `json:"exchangeRate"`
@@ -81,7 +81,7 @@ func (w *WalletTransaction) UnmarshalJSON(data []byte) error {
 	*w = WalletTransaction(t)
 	switch w.FromType {
 	case ToFromTypeTeam:
-		var fromTeam Team
+		var fromTeam PayingTeam
 		if err := json.Unmarshal(w.From, &fromTeam); err != nil {
 			return err
 		}
@@ -95,7 +95,7 @@ func (w *WalletTransaction) UnmarshalJSON(data []byte) error {
 	}
 	switch w.ToType {
 	case ToFromTypeTeam:
-		var toTeam Team
+		var toTeam PayingTeam
 		if err := json.Unmarshal(w.To, &toTeam); err != nil {
 			return err
 		}

@@ -49,7 +49,7 @@ func TestWalletTransaction_MarshalJSON(t *testing.T) {
 	`)
 	var walletTransaction WalletTransaction
 	assert.NilError(t, json.Unmarshal([]byte(expected), &walletTransaction))
-	expectedFromTeam := &Team{
+	expectedFromTeam := &PayingTeam{
 		ID:                14,
 		PublicName:        "Monta",
 		PartnerExternalID: toPointer("abcd"),
