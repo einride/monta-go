@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"strconv"
 	"time"
 )
 
@@ -14,6 +15,7 @@ type ListWalletTransactionsRequest struct {
 	FromDate *time.Time
 	// ToDate allows to filter to retrieve transactions where [WalletTransaction.CreatedAt] <= ToDate.
 	ToDate *time.Time
+	TeamID *int64
 }
 
 // ListWalletTransactionsResponse is the response output from the [Client.ListWalletTransactions] method.
@@ -37,6 +39,9 @@ func (c *clientImpl) ListWalletTransactions(
 	}
 	if request.ToDate != nil {
 		query.Set("toDate", request.ToDate.UTC().Format(time.RFC3339))
+	}
+	if request.TeamID != nil {
+		query.Set("teamId", strconv.Itoa(int(*request.TeamID)))
 	}
 	return doGet[ListWalletTransactionsResponse](ctx, c, path, query)
 }
