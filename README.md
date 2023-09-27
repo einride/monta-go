@@ -52,26 +52,35 @@ fmt.Println(response)
 
 ### CLI
 
+#### Build
+
+First you need to build the CLI - to create the monta CLI executable. Assuming you are on root level of the project:
+
+```
+$ cd cmd/monta
+$ go build
+```
+
 #### Login
 
 ```
-$ monta login --client-id <ID> --client-secret <SECRET>
+$ ./monta login --client-id <ID> --client-secret <SECRET>
 ```
 
 #### `GET /v1/auth/me`
 
 ```
-$ monta me
+$ ./monta me
 ```
 
 #### `GET /v1/sites`
 
 ```
-$ monta sites
+$ ./monta sites
 ```
 
 #### `GET /v1/charge-points`
 
 ```
-$ monta charge-points
+$ ./monta charge-points
 ```
