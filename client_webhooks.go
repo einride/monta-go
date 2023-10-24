@@ -7,6 +7,8 @@ import (
 	"net/url"
 )
 
+const webhooksConfigBasePath = "/v1/webhooks/config"
+
 // GetWebhookConfigResponse is the response output from the [Client.GetWebhookConfig] method.
 type GetWebhookConfigResponse struct {
 	// A HTTPS URL to send the webhook payload to when an event occurs.
@@ -19,9 +21,8 @@ type GetWebhookConfigResponse struct {
 
 // GetWebhookConfig to get your webhook config.
 func (c *clientImpl) GetWebhookConfig(ctx context.Context) (*GetWebhookConfigResponse, error) {
-	path := "/v1/webhooks/config"
 	query := url.Values{}
-	return doGet[GetWebhookConfigResponse](ctx, c, path, query)
+	return doGet[GetWebhookConfigResponse](ctx, c, webhooksConfigBasePath, query)
 }
 
 // UpdateWebhookConfigRequest is the request input to the [Client.UpdateWebhookConfig] method.
@@ -49,10 +50,14 @@ func (c *clientImpl) UpdateWebhookConfig(
 	ctx context.Context,
 	request *UpdateWebhookConfigRequest,
 ) (*UpdateWebhookConfigResponse, error) {
-	path := "/v1/webhooks/config"
 	var requestBody bytes.Buffer
 	if err := json.NewEncoder(&requestBody).Encode(&request); err != nil {
 		return nil, err
 	}
-	return doPut[UpdateWebhookConfigResponse](ctx, c, path, &requestBody)
+	return doPut[UpdateWebhookConfigResponse](ctx, c, webhooksConfigBasePath, &requestBody)
+}
+
+// DeleteWebhookConfig to delete a webhook config.
+func (c *clientImpl) DeleteWebhookConfig(ctx context.Context) error {
+	return doDelete(ctx, c, webhooksConfigBasePath)
 }
