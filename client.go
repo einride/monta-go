@@ -59,11 +59,11 @@ type Client interface {
 	) (*ListTeamsResponse, error)
 
 	// Webhooks
-	GetWebhookConfig(ctx context.Context) (*GetWebhookConfigResponse, error)
+	GetWebhookConfig(ctx context.Context) (*WebhookConfig, error)
 	UpdateWebhookConfig(
 		ctx context.Context,
-		request *UpdateWebhookConfigRequest,
-	) (*UpdateWebhookConfigResponse, error)
+		request *WebhookConfig,
+	) (*WebhookConfig, error)
 	DeleteWebhookConfig(ctx context.Context) error
 }
 
