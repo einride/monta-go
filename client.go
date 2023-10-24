@@ -64,6 +64,7 @@ type Client interface {
 		ctx context.Context,
 		request *UpdateWebhookConfigRequest,
 	) (*UpdateWebhookConfigResponse, error)
+	DeleteWebhookConfig(ctx context.Context) error
 }
 
 // clientImpl to the Monta Partner API.
