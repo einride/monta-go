@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"time"
@@ -58,6 +57,9 @@ type Client interface {
 		ctx context.Context,
 		request *ListTeamsRequest,
 	) (*ListTeamsResponse, error)
+
+	// Webhooks
+	GetWebhookConfig(ctx context.Context) (*GetWebhookConfigResponse, error)
 }
 
 // clientImpl to the Monta Partner API.
@@ -225,7 +227,7 @@ func execute[T any](
 	if httpResponse.StatusCode != http.StatusOK && httpResponse.StatusCode != http.StatusCreated {
 		return nil, newStatusError(httpResponse)
 	}
-	respBody, err := ioutil.ReadAll(httpResponse.Body)
+	respBody, err := io.ReadAll(httpResponse.Body)
 	if err != nil {
 		return nil, err
 	}

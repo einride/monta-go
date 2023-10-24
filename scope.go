@@ -11,4 +11,5 @@ const (
 	ScopeChargeTransactions Scope = "charge-transactions"
 	ScopeWalletTransactions Scope = "wallet-transactions"
 	ScopeControlCharging    Scope = "control-charging"
+	ScopeManageWebhooks     Scope = "manage-webhooks"
 )
