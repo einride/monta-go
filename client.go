@@ -60,6 +60,10 @@ type Client interface {
 
 	// Webhooks
 	GetWebhookConfig(ctx context.Context) (*GetWebhookConfigResponse, error)
+	UpdateWebhookConfig(
+		ctx context.Context,
+		request *UpdateWebhookConfigRequest,
+	) (*UpdateWebhookConfigResponse, error)
 }
 
 // clientImpl to the Monta Partner API.
@@ -183,6 +187,11 @@ func doPatch[T any](ctx context.Context, client *clientImpl, path string, body i
 func doDelete(ctx context.Context, client *clientImpl, path string) error {
 	_, err := execute[any](ctx, client, http.MethodDelete, path, nil, nil, nil)
 	return err
+}
+
+// Template method to execute PUT requests towards monta.
+func doPut[T any](ctx context.Context, client *clientImpl, path string, body io.Reader) (*T, error) {
+	return execute[T](ctx, client, http.MethodPut, path, nil, &http.Header{"content-type": {"application/json"}}, body)
 }
 
 // Template method to execute requests towards monta.
