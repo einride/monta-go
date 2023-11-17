@@ -40,6 +40,7 @@ func TestCharge_MarshalJSON(t *testing.T) {
   "stopReason": "Some reason why the charge stopped.",
   "paymentMethod": "free",
   "note": "Lorem Ipsum",
+  "chargePointKw": 138.56,
   "kwhLimit": 21,
   "currency": {
     "identifier": "DKK",

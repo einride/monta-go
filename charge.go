@@ -85,6 +85,9 @@ type Charge struct {
 	// A note taken for this charge.
 	Note *string `json:"note"`
 
+	// The charge point KW recorded during the charge.
+	ChargePointKw *float64 `json:"chargePointKw"`
+
 	// Configured Kwh limit for this charge.
 	KWhLimit *float64 `json:"kwhLimit"`
 
