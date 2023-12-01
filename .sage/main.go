@@ -11,7 +11,7 @@ import (
 	"go.einride.tech/sage/tools/sggoreleaser"
 	"go.einride.tech/sage/tools/sggoreview"
 	"go.einride.tech/sage/tools/sggosemanticrelease"
-	"go.einride.tech/sage/tools/sgmarkdownfmt"
+	"go.einride.tech/sage/tools/sgmdformat"
 )
 
 func main() {
@@ -60,7 +60,7 @@ func GoLint(ctx context.Context) error {
 
 func FormatMarkdown(ctx context.Context) error {
 	sg.Logger(ctx).Println("formatting Markdown files...")
-	return sgmarkdownfmt.Command(ctx, "-w", ".").Run()
+	return sgmdformat.Command(ctx, ".").Run()
 }
 
 func ConvcoCheck(ctx context.Context) error {
