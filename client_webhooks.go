@@ -15,8 +15,8 @@ type WebhookConfig struct {
 	WebhookURL string `json:"webhookUrl"`
 	// A cryptoghrapic secret used to sign the webhook payload.
 	WebhookSecret string `json:"webhookSecret"`
-	// A list of event type to subscribe to. Use ["*"] to subscribe to all.
-	EventTypes []*WebhookEventType `json:"eventTypes"`
+	// List of entity types in plural to subscribe to. Use ["*"] to subscribe to all.
+	EventTypes []*WebhookEntityPluralType `json:"eventTypes"`
 }
 
 // GetWebhookConfig to get your webhook config.
