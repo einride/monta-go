@@ -22,6 +22,7 @@ func main() {
 	cmd.AddCommand(newListChargePointsCommand())
 	cmd.AddCommand(newListChargesCommand())
 	cmd.AddCommand(newListWalletTransactionsCommand())
+	cmd.AddCommand(newListWebhookEntriesCommand())
 	if err := cmd.Execute(); err != nil {
 		_, _ = fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
@@ -419,6 +420,72 @@ func newListWalletTransactionsCommand() *cobra.Command {
 			}
 			for _, walletTransaction := range response.WalletTransactions {
 				data, err := json.MarshalIndent(walletTransaction, "", "  ")
+				if err != nil {
+					return err
+				}
+				cmd.Println(string(data))
+			}
+			if *page >= int(response.PageMeta.TotalPageCount) {
+				break
+			}
+			*page = int(response.PageMeta.CurrentPage + 1)
+		}
+		return nil
+	}
+	return cmd
+}
+
+func newListWebhookEntriesCommand() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "webhook-entries",
+		Short: "List the webhook calls of the last 24 h",
+		Annotations: map[string]string{
+			apiCommandAnnotation: "GET /v1/webhooks/entries",
+		},
+	}
+	cmd.SetHelpFunc(helpFunc)
+	cmd.SetUsageFunc(usageFunc)
+	cmd.SetOut(os.Stdout)
+	cmd.SetErr(os.Stderr)
+	page := cmd.Flags().Int("page", allPagesValue, "page number to retrieve")
+	cmd.Flag("page").Annotations = map[string][]string{
+		argumentFlagAnnotation: {},
+	}
+	perPage := cmd.Flags().Int("per-page", 10, "number of items per page")
+	cmd.Flag("per-page").Annotations = map[string][]string{
+		argumentFlagAnnotation: {},
+	}
+	cmd.RunE = func(cmd *cobra.Command, _ []string) error {
+		client, err := newClientWithAuthentication(cmd)
+		if err != nil {
+			return err
+		}
+		var allPages bool
+		if *page == allPagesValue {
+			allPages = true
+			*page = 0
+		}
+		for {
+			request := &monta.ListWebhookEntriesRequest{
+				PageFilters: monta.PageFilters{
+					Page:    *page,
+					PerPage: *perPage,
+				},
+			}
+			response, err := client.ListWebhookEntries(cmd.Context(), request)
+			if err != nil {
+				return err
+			}
+			if !allPages {
+				data, err := json.MarshalIndent(response, "", "  ")
+				if err != nil {
+					return err
+				}
+				cmd.Println(string(data))
+				break
+			}
+			for _, event := range response.Events {
+				data, err := json.MarshalIndent(event, "", "  ")
 				if err != nil {
 					return err
 				}
