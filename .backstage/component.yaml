@@ -5,8 +5,8 @@ metadata:
   description: Go library to integrate with Monta
   annotations:
     github.com/project-slug: einride/monta-go
-    github.com/team-slug: einride/team-charge-control
+    github.com/team-slug: einride/charger-intelligence
 spec:
   type: library
   lifecycle: production
-  owner: team-charge-control
+  owner: charger-intelligence
