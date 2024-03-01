@@ -607,6 +607,7 @@ func usageFunc(cmd *cobra.Command) error {
 		cmd.PrintErrln("AUTH FLAGS")
 		printFlags(cmd, flags)
 	}
+	//nolint:revive
 	if flags := getFlags(cmd, func(command *cobra.Command, flag *pflag.Flag) bool {
 		return !isArgumentFlag(cmd, flag) && !isAuthFlag(cmd, flag)
 	}); len(flags) > 0 {
