@@ -35,6 +35,9 @@ type ListChargesRequest struct {
 
 	// Filter to retrieve charges where createdAt >= fromDate.
 	FromDate *time.Time
+
+	// Filter to retrieve charges where createdAt <= toDate.
+	ToDate *time.Time
 }
 
 // ListChargesResponse is the response output from the [Client.ListCharges] method.
@@ -86,6 +89,9 @@ func (c *clientImpl) ListCharges(ctx context.Context, request *ListChargesReques
 	}
 	if request.FromDate != nil {
 		query.Set("fromDate", request.FromDate.UTC().Format(time.RFC3339))
+	}
+	if request.ToDate != nil {
+		query.Set("toDate", request.ToDate.UTC().Format(time.RFC3339))
 	}
 	return doGet[ListChargesResponse](ctx, c, path, query)
 }
