@@ -42,7 +42,14 @@ func TestSite_MarshalJSON(t *testing.T) {
     }
   ],
   "createdAt": "2022-05-12T15:56:45.999189Z",
-  "updatedAt": "2022-05-17T15:56:45.999189Z"
+  "updatedAt": "2022-05-17T15:56:45.999189Z",
+  "operator": {
+    "id": 445,
+    "name": "Einride",
+    "identifier": "einride",
+    "vatNumber": "123",
+    "partnerId": 423
+  }
 }
 	`)
 	var site Site

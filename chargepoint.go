@@ -57,6 +57,9 @@ type ChargePoint struct {
 
 	// When the charge point was last updated.
 	UpdatedAt time.Time `json:"updatedAt"`
+
+	// Operator of this charge point
+	Operator *Operator `json:"operator"`
 }
 
 // ChargePointDeepLinks contains deep-links to a charge point.

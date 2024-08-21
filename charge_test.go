@@ -60,7 +60,14 @@ func TestCharge_MarshalJSON(t *testing.T) {
     "percentage": 42.2,
     "source": "vehicle"
   },
-  "socLimit": 80
+  "socLimit": 80,
+  "operator": {
+    "id": 445,
+    "name": "Einride",
+    "identifier": "einride",
+    "vatNumber": "123",
+    "partnerId": 423
+  }
 }
 	`)
 	var charge Charge

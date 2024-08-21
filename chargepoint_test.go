@@ -49,7 +49,14 @@ func TestChargePoint_MarshalJSON(t *testing.T) {
     "web": "http://example.com"
   },
   "createdAt": "2022-05-12T15:56:45.999189Z",
-  "updatedAt": "2022-05-17T15:56:45.999189Z"
+  "updatedAt": "2022-05-17T15:56:45.999189Z",
+  "operator": {
+    "id": 445,
+    "name": "Einride",
+    "identifier": "einride",
+    "vatNumber": "123",
+    "partnerId": 423
+  }
 }
 	`)
 	var chargePoint ChargePoint

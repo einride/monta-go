@@ -105,6 +105,9 @@ type Charge struct {
 
 	// Configured SoC limit for this charge.
 	SoCLimit *float64 `json:"socLimit"`
+
+	// Operator of this charge
+	Operator *Operator `json:"operator"`
 }
 
 // Sum of kwh for a given hour.

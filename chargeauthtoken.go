@@ -31,4 +31,6 @@ type ChargeAuthToken struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Update date of this charge auth token.
 	UpdatedAt time.Time `json:"updatedAt"`
+	// Operator of this charge auth token.
+	Operator *Operator `json:"operator"`
 }

@@ -45,4 +45,7 @@ type Site struct {
 
 	// When the charging site was last updated.
 	UpdatedAt time.Time `json:"updatedAt"`
+
+	// Operator of this site
+	Operator *Operator `json:"operator"`
 }
