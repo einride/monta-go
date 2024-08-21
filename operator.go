@@ -13,4 +13,7 @@ type Operator struct {
 
 	// VATNumber of the operator.
 	VATNumber string `json:"vatNumber"`
+
+	// PartnerID of the operator (owner of this operator).
+	PartnerID int64 `json:"partnerId"`
 }

@@ -35,7 +35,8 @@ func TestWalletTransaction_MarshalJSON(t *testing.T) {
     "id": 14,
     "name": "Monta",
     "identifier": "monta",
-    "vatNumber": "FOO-123-ABC"
+    "vatNumber": "FOO-123-ABC",
+    "partnerId": 423
   },
   "exchangeRate": 1,
   "createdAt": "2022-04-22T09:47:05Z",
@@ -61,6 +62,7 @@ func TestWalletTransaction_MarshalJSON(t *testing.T) {
 		Name:       "Monta",
 		Identifier: "monta",
 		VATNumber:  "FOO-123-ABC",
+		PartnerID:  423,
 	}
 	assert.DeepEqual(t, expectedToOperator, walletTransaction.ToOperator)
 	walletTransaction.To = nil

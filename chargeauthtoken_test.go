@@ -19,7 +19,14 @@ func TestChargeAuthToken_MarshalJSON(t *testing.T) {
   "partnerExternalId": "abc",
   "blockedAt": "2022-05-12T15:56:45.99Z",
   "createdAt": "2022-05-12T15:56:45.99Z",
-  "updatedAt": "2022-05-12T16:56:45.99Z"
+  "updatedAt": "2022-05-12T16:56:45.99Z",
+  "operator": {
+    "id": 445,
+    "name": "Einride",
+    "identifier": "einride",
+    "vatNumber": "123",
+    "partnerId": 423
+  }
 }
 	`)
 	var token ChargeAuthToken
