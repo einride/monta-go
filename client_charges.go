@@ -23,6 +23,9 @@ type ListChargesRequest struct {
 	// Filter to retrieve charges with specified siteId.
 	SiteID *int64
 
+	// Filter to retrieve charges with specified operatorId.
+	OperatorID *int64
+
 	// Filter to retrieve charges by state.
 	State *ChargeState
 
@@ -77,6 +80,9 @@ func (c *clientImpl) ListCharges(ctx context.Context, request *ListChargesReques
 	}
 	if request.SiteID != nil {
 		query.Set("siteId", strconv.Itoa(int(*request.SiteID)))
+	}
+	if request.OperatorID != nil {
+		query.Set("operatorId", strconv.Itoa(int(*request.OperatorID)))
 	}
 	if request.State != nil {
 		query.Set("state", string(*request.State))
