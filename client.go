@@ -66,6 +66,15 @@ type Client interface {
 	) (*WebhookConfig, error)
 	DeleteWebhookConfig(ctx context.Context) error
 	ListWebhookEntries(ctx context.Context, request *ListWebhookEntriesRequest) (*ListWebhookEntriesResponse, error)
+
+	// Price Groups
+	ListPriceGroups(ctx context.Context, request *ListPriceGroupsRequest) (*ListPriceGroupsResponse, error)
+	CreatePriceGroup(ctx context.Context, request CreateOrUpdatePriceGroupRequest) (*PriceGroup, error)
+	GetPriceGroup(ctx context.Context, priceGroupID int64) (*PriceGroup, error)
+	UpdatePriceGroup(ctx context.Context, priceGroupID int64, request CreateOrUpdatePriceGroupRequest) (*PriceGroup, error)
+	DeletePriceGroup(ctx context.Context, priceGroupID int64) error
+	ApplyPriceGroup(ctx context.Context, priceGroupID int64, request ApplyPriceGroupRequest) (*PriceGroup, error)
+	SetDefaultPriceGroup(ctx context.Context, priceGroupID int64) error
 }
 
 // clientImpl to the Monta Partner API.
@@ -194,6 +203,12 @@ func doDelete(ctx context.Context, client *clientImpl, path string) error {
 // Template method to execute PUT requests towards monta.
 func doPut[T any](ctx context.Context, client *clientImpl, path string, body io.Reader) (*T, error) {
 	return execute[T](ctx, client, http.MethodPut, path, nil, &http.Header{"content-type": {"application/json"}}, body)
+}
+
+// Template method to execute PUT requests without a body towards monta.
+func doPutNoBody(ctx context.Context, client *clientImpl, path string) error {
+	_, err := doPut[struct{}](ctx, client, path, http.NoBody)
+	return err
 }
 
 // Template method to execute requests towards monta.

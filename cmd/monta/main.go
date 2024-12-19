@@ -23,6 +23,7 @@ func main() {
 	cmd.AddCommand(newListChargesCommand())
 	cmd.AddCommand(newListWalletTransactionsCommand())
 	cmd.AddCommand(newListWebhookEntriesCommand())
+	cmd.AddCommand(newListPriceGroupsCommand())
 	if err := cmd.Execute(); err != nil {
 		_, _ = fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
@@ -374,7 +375,7 @@ func newListWalletTransactionsCommand() *cobra.Command {
 		Use:   "wallet-transactions",
 		Short: "List your wallet transactions",
 		Annotations: map[string]string{
-			apiCommandAnnotation: "GET /v1/wallet-transactiosn",
+			apiCommandAnnotation: "GET /v1/wallet-transactions",
 		},
 	}
 	cmd.SetHelpFunc(helpFunc)
@@ -486,6 +487,84 @@ func newListWebhookEntriesCommand() *cobra.Command {
 			}
 			for _, event := range response.Events {
 				data, err := json.MarshalIndent(event, "", "  ")
+				if err != nil {
+					return err
+				}
+				cmd.Println(string(data))
+			}
+			if *page >= int(response.PageMeta.TotalPageCount) {
+				break
+			}
+			*page = int(response.PageMeta.CurrentPage + 1)
+		}
+		return nil
+	}
+	return cmd
+}
+
+func newListPriceGroupsCommand() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "price-groups",
+		Short: "List your price groups",
+		Annotations: map[string]string{
+			apiCommandAnnotation: "GET /v1/price-groups",
+		},
+	}
+	cmd.SetHelpFunc(helpFunc)
+	cmd.SetUsageFunc(usageFunc)
+	cmd.SetOut(os.Stdout)
+	cmd.SetErr(os.Stderr)
+	teamID := cmd.Flags().Int("team-id", allPagesValue, "team id")
+	cmd.Flag("team-id").Annotations = map[string][]string{
+		argumentFlagAnnotation: {},
+	}
+	page := cmd.Flags().Int("page", allPagesValue, "page number to retrieve")
+	cmd.Flag("page").Annotations = map[string][]string{
+		argumentFlagAnnotation: {},
+	}
+	perPage := cmd.Flags().Int("per-page", 10, "number of items per page")
+	cmd.Flag("per-page").Annotations = map[string][]string{
+		argumentFlagAnnotation: {},
+	}
+	cmd.RunE = func(cmd *cobra.Command, _ []string) error {
+		client, err := newClientWithAuthentication(cmd)
+		if err != nil {
+			return err
+		}
+		var allPages bool
+		if *page == allPagesValue {
+			allPages = true
+			*page = 0
+		}
+		var reqID int64
+		if teamID != nil {
+			reqID = int64(*teamID)
+		} else {
+			return fmt.Errorf("invalid team id")
+		}
+
+		for {
+			request := &monta.ListPriceGroupsRequest{
+				TeamID: &reqID,
+				PageFilters: monta.PageFilters{
+					Page:    *page,
+					PerPage: *perPage,
+				},
+			}
+			response, err := client.ListPriceGroups(cmd.Context(), request)
+			if err != nil {
+				return err
+			}
+			if !allPages {
+				data, err := json.MarshalIndent(response, "", "  ")
+				if err != nil {
+					return err
+				}
+				cmd.Println(string(data))
+				break
+			}
+			for _, priceGroup := range response.PriceGroups {
+				data, err := json.MarshalIndent(priceGroup, "", "  ")
 				if err != nil {
 					return err
 				}
