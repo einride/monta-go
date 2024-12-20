@@ -2,3 +2,4 @@
 .vscode
 .semrel
 .DS_Store
+cmd/monta/monta

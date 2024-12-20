@@ -84,7 +84,7 @@ type PricingRequestBody struct {
 	// Used by Idle fee. The maximum the user will be charged for the idle fee.
 	FeePriceMax *Price `json:"feePriceMax"`
 	// Used by spot price. Additional absolute money or percentages values to be added on top of the previous calculations.
-	Additional *Additional `json:"additional"`
+	Additional []*Additional `json:"additional"`
 	// DateTime "from" time to which this pricing should apply from.
 	From *time.Time `json:"from"`
 	// DateTime "to" time to which this pricing should apply to

@@ -107,7 +107,7 @@ type Pricing struct {
 	FeePriceMax *Price `json:"feePriceMax"`
 
 	// Used by spot price. Additional absolute money or percentages values to be added on top of the previous calculations.
-	Additional *[]Additional `json:"additional"`
+	Additional []*Additional `json:"additional"`
 
 	// DateTime "from" time to which this pricing should apply from.
 	From *time.Time `json:"from"`
