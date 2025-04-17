@@ -150,11 +150,12 @@ func (c *clientImpl) getToken(ctx context.Context) (_ *Token, err error) {
 		c.tokenSemaphore <- struct{}{}
 	}()
 	if c.token != nil {
-		now := time.Now()
-		if c.token.AccessTokenExpirationTime.After(now) {
+		// Add safety margin to now() to prevent token expiration before the request is made
+		deadline := time.Now().Add(time.Minute)
+		if c.token.AccessTokenExpirationTime.After(deadline) {
 			return c.token, nil
 		}
-		if c.token.RefreshTokenExpirationTime.After(now) {
+		if c.token.RefreshTokenExpirationTime.After(deadline) {
 			refreshedToken, err := c.RefreshToken(ctx, &RefreshTokenRequest{
 				RefreshToken: c.token.RefreshToken,
 			})
