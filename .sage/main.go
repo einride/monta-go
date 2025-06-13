@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"os"
 
 	"go.einride.tech/sage/sg"
 	"go.einride.tech/sage/tools/sgconvco"
@@ -64,6 +65,10 @@ func ConvcoCheck(ctx context.Context) error {
 
 func GitVerifyNoDiff(ctx context.Context) error {
 	sg.Logger(ctx).Println("verifying that git has no diff...")
+	if os.Getenv("SKIP_GIT_VERIFY_NO_DIFF") == "true" {
+	    sg.Logger(ctx).Println("skipping git verification (SKIP_GIT_VERIFY_NO_DIFF is set)")
+	    return nil
+	}
 	return sggit.VerifyNoDiff(ctx)
 }
 
