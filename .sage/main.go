@@ -100,3 +100,9 @@ func GoReleaser(ctx context.Context, snapshot bool) error {
 	}
 	return sggoreleaser.Command(ctx, args...).Run()
 }
+
+func DependabotFix(ctx context.Context) error {
+	sg.SerialDeps(ctx, Proto.All, Terraform.All, Backend.Default)
+	sg.Deps(ctx, ConvcoCheck, FormatMarkdown, FormatYAML, GoLicenses)
+	return nil
+}
