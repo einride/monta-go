@@ -37,6 +37,11 @@ func Default(ctx context.Context) error {
 	return nil
 }
 
+func DependabotFix(ctx context.Context) error {
+	sg.Deps(ctx, FormatMarkdown, GoModTidy, MontaCmd.GoModTidy)
+	return nil
+}
+
 func GoModTidy(ctx context.Context) error {
 	sg.Logger(ctx).Println("tidying Go module files...")
 	return sg.Command(ctx, "go", "mod", "tidy", "-v").Run()
@@ -99,12 +104,4 @@ func GoReleaser(ctx context.Context, snapshot bool) error {
 		args = append(args, "--snapshot")
 	}
 	return sggoreleaser.Command(ctx, args...).Run()
-}
-
-func DependabotFix(ctx context.Context) error {
-	sg.Deps(ctx, ConvcoCheck, FormatMarkdown)
-	sg.Deps(ctx, GoLint, MontaCmd.Default)
-	sg.Deps(ctx, GoTest)
-	sg.Deps(ctx, GoModTidy)
-	return nil
 }
