@@ -19,3 +19,9 @@ func (MontaCmd) GoModTidy(ctx context.Context) error {
 	cmd.Dir = sg.FromGitRoot("cmd", "monta")
 	return cmd.Run()
 }
+
+func DependabotFix(ctx context.Context) error {
+	sg.SerialDeps(ctx, Proto.All, Terraform.All, Backend.Default)
+	sg.Deps(ctx, ConvcoCheck, FormatMarkdown, FormatYAML, GoLicenses)
+	return nil
+}
