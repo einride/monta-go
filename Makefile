@@ -51,6 +51,10 @@ convco-check: $(sagefile)
 default: $(sagefile)
 	@$(sagefile) Default
 
+.PHONY: dependabot-fix
+dependabot-fix: $(sagefile)
+	@$(sagefile) DependabotFix
+
 .PHONY: format-markdown
 format-markdown: $(sagefile)
 	@$(sagefile) FormatMarkdown
