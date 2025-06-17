@@ -100,3 +100,11 @@ func GoReleaser(ctx context.Context, snapshot bool) error {
 	}
 	return sggoreleaser.Command(ctx, args...).Run()
 }
+
+func DependabotFix(ctx context.Context) error {
+	sg.Deps(ctx, ConvcoCheck, FormatMarkdown)
+	sg.Deps(ctx, GoLint, MontaCmd.Default)
+	sg.Deps(ctx, GoTest)
+	sg.Deps(ctx, GoModTidy)
+	return nil
+}
