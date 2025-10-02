@@ -36,6 +36,10 @@ type Client interface {
 
 	// Charge Point Integrations
 	GetChargePointIntegration(ctx context.Context, chargePointIntegrationID int64) (*ChargePointIntegration, error)
+	ListChargePointIntegrations(
+		ctx context.Context,
+		request *ListChargePointIntegrationsRequest,
+	) (*ListChargePointIntegrationsResponse, error)
 
 	// Charges
 	ListCharges(ctx context.Context, request *ListChargesRequest) (*ListChargesResponse, error)
