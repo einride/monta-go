@@ -25,6 +25,9 @@ type ChargePoint struct {
 	// Max KW available at this charge point.
 	MaxKW *float64 `json:"maxKW"`
 
+	// The model id of this charge point
+	ModelID *int64 `json:"modelId"`
+
 	// Type of charge point (AC / DC).
 	Type *ChargePointType `json:"type"`
 
