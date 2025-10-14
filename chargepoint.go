@@ -40,6 +40,9 @@ type ChargePoint struct {
 	// Indicates if a cable is plugged in (true)
 	CablePluggedIn bool `json:"cablePluggedIn"`
 
+	// Brand name for this charge point.
+	BrandName *string `json:"brandName"`
+
 	// External Id of this entity, managed by you.
 	PartnerExternalID *string `json:"partnerExternalId"`
 
