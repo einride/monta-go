@@ -23,6 +23,7 @@ func TestChargePoint_MarshalJSON(t *testing.T) {
   "state": "available",
   "lastMeterReadingKwh": 913.2,
   "cablePluggedIn": true,
+  "brandName": "Easee",
   "partnerExternalId": "abc",
   "location": {
     "coordinates": {
