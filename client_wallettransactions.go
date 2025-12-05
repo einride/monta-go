@@ -33,7 +33,7 @@ func (c *clientImpl) ListWalletTransactions(
 ) (*ListWalletTransactionsResponse, error) {
 	path := "/v1/wallet-transactions"
 	query := url.Values{}
-	request.PageFilters.Apply(query)
+	request.Apply(query)
 	if request.FromDate != nil {
 		query.Set("fromDate", request.FromDate.UTC().Format(time.RFC3339))
 	}

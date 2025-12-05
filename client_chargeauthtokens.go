@@ -86,7 +86,7 @@ func (c *clientImpl) ListChargeAuthTokens(
 	request *ListChargeAuthTokensRequest,
 ) (*ListChargeAuthTokensResponse, error) {
 	query := url.Values{}
-	request.PageFilters.Apply(query)
+	request.Apply(query)
 	if request.TeamID != nil {
 		query.Set("teamId", strconv.Itoa(int(*request.TeamID)))
 	}

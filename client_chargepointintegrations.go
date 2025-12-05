@@ -40,7 +40,7 @@ func (c *clientImpl) ListChargePointIntegrations(
 ) (*ListChargePointIntegrationsResponse, error) {
 	path := "/v1/charge-point-integrations"
 	query := url.Values{}
-	request.PageFilters.Apply(query)
+	request.Apply(query)
 	query.Set("chargePointId", strconv.Itoa(int(request.ChargePointID)))
 	if request.IncludeDeleted != nil {
 		query.Set("includeDeleted", strconv.FormatBool(*request.IncludeDeleted))
