@@ -97,7 +97,7 @@ func (c *clientImpl) ListPriceGroups(
 	request *ListPriceGroupsRequest,
 ) (*ListPriceGroupsResponse, error) {
 	query := url.Values{}
-	request.PageFilters.Apply(query)
+	request.Apply(query)
 	if request.TeamID != nil {
 		query.Set("teamId", strconv.Itoa(int(*request.TeamID)))
 	}

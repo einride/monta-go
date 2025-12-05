@@ -71,7 +71,7 @@ type StartChargeResponse struct {
 func (c *clientImpl) ListCharges(ctx context.Context, request *ListChargesRequest) (*ListChargesResponse, error) {
 	path := "/v1/charges"
 	query := url.Values{}
-	request.PageFilters.Apply(query)
+	request.Apply(query)
 	if request.ChargePointID != nil {
 		query.Set("chargePointId", strconv.Itoa(int(*request.ChargePointID)))
 	}

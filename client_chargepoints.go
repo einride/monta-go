@@ -31,7 +31,7 @@ func (c *clientImpl) ListChargePoints(
 ) (*ListChargePointsResponse, error) {
 	path := "/v1/charge-points"
 	query := url.Values{}
-	request.PageFilters.Apply(query)
+	request.Apply(query)
 	if request.SiteID != nil {
 		query.Set("siteId", strconv.Itoa(int(*request.SiteID)))
 	}

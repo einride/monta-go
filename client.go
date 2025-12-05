@@ -20,7 +20,10 @@ type Client interface {
 	RefreshToken(ctx context.Context, request *RefreshTokenRequest) (*Token, error)
 
 	// Charge Auth Tokens
-	ListChargeAuthTokens(ctx context.Context, request *ListChargeAuthTokensRequest) (*ListChargeAuthTokensResponse, error)
+	ListChargeAuthTokens(
+		ctx context.Context,
+		request *ListChargeAuthTokensRequest,
+	) (*ListChargeAuthTokensResponse, error)
 	GetChargeAuthToken(ctx context.Context, chargeAuthTokenID int64) (*ChargeAuthToken, error)
 	CreateChargeAuthToken(ctx context.Context, request CreateChargeAuthTokenRequest) (*ChargeAuthToken, error)
 	DeleteChargeAuthToken(ctx context.Context, chargeAuthTokenID int64) error
@@ -78,7 +81,11 @@ type Client interface {
 	ListPriceGroups(ctx context.Context, request *ListPriceGroupsRequest) (*ListPriceGroupsResponse, error)
 	CreatePriceGroup(ctx context.Context, request CreateOrUpdatePriceGroupRequest) (*PriceGroup, error)
 	GetPriceGroup(ctx context.Context, priceGroupID int64) (*PriceGroup, error)
-	UpdatePriceGroup(ctx context.Context, priceGroupID int64, request CreateOrUpdatePriceGroupRequest) (*PriceGroup, error)
+	UpdatePriceGroup(
+		ctx context.Context,
+		priceGroupID int64,
+		request CreateOrUpdatePriceGroupRequest,
+	) (*PriceGroup, error)
 	DeletePriceGroup(ctx context.Context, priceGroupID int64) error
 	ApplyPriceGroup(ctx context.Context, priceGroupID int64, request ApplyPriceGroupRequest) (*PriceGroup, error)
 	SetDefaultPriceGroup(ctx context.Context, priceGroupID int64) error

@@ -29,6 +29,6 @@ func (c *clientImpl) ListWebhookEntries(
 	request *ListWebhookEntriesRequest,
 ) (*ListWebhookEntriesResponse, error) {
 	query := url.Values{}
-	request.PageFilters.Apply(query)
+	request.Apply(query)
 	return doGet[ListWebhookEntriesResponse](ctx, c, webhooksEntriesBasePath, query)
 }

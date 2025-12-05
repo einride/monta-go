@@ -29,7 +29,7 @@ func (c *clientImpl) ListTeams(
 ) (*ListTeamsResponse, error) {
 	path := "/v1/teams"
 	query := url.Values{}
-	request.PageFilters.Apply(query)
+	request.Apply(query)
 	if request.PartnerExternalID != nil {
 		query.Set("partnerExternalId", *request.PartnerExternalID)
 	}

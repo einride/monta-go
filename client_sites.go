@@ -23,7 +23,7 @@ type ListSitesResponse struct {
 func (c *clientImpl) ListSites(ctx context.Context, request *ListSitesRequest) (*ListSitesResponse, error) {
 	path := "/v1/sites"
 	query := url.Values{}
-	request.PageFilters.Apply(query)
+	request.Apply(query)
 	return doGet[ListSitesResponse](ctx, c, path, query)
 }
 
