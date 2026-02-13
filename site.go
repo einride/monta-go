@@ -19,8 +19,8 @@ type Site struct {
 	// AvailableChargePointCount is the number of available charge points at this site.
 	AvailableChargePointCount int64 `json:"availableChargePointCount"`
 
-	// MaxKW available at this site.
-	MaxKW *float64 `json:"maxKW"`
+	// Max KW available at this site.
+	MaxKw *float64 `json:"maxKw"`
 
 	// Type of charge points at this site.
 	Type *ChargePointType `json:"type"`

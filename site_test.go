@@ -16,7 +16,7 @@ func TestSite_MarshalJSON(t *testing.T) {
   "chargePointCount": 42,
   "activeChargePointCount": 33,
   "availableChargePointCount": 4,
-  "maxKW": 150,
+  "maxKw": 150,
   "type": "ac",
   "visibility": "public",
   "note": "In order to access this site enter 0000 as code at the gate.",
