@@ -23,7 +23,7 @@ type ChargePoint struct {
 	Visibility Visibility `json:"visibility"`
 
 	// Max KW available at this charge point.
-	MaxKW *float64 `json:"maxKW"`
+	MaxKw *float64 `json:"maxKw"`
 
 	// Type of charge point (AC / DC).
 	Type *ChargePointType `json:"type"`

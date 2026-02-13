@@ -24,7 +24,7 @@ func TestChargePointIntegration_MarshalJSON(t *testing.T) {
     "serialNumber": "string",
     "name": "Monta CPH HQ",
     "visibility": "public",
-    "maxKW": 150,
+    "maxKw": 150,
     "type": "ac",
     "note": "In order to access this charge point enter 0000 as code at the gate.",
     "state": "available",
