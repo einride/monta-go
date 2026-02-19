@@ -64,6 +64,9 @@ type Charge struct {
 	// Configured price limit for this charge.
 	PriceLimit *float64 `json:"priceLimit"`
 
+	// Cost incurred for this charge
+	Cost *float64 `json:"cost"`
+
 	// Average price per Kwh.
 	AveragePricePerKWh *float64 `json:"averagePricePerKwh"`
 
