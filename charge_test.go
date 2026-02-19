@@ -33,6 +33,7 @@ func TestCharge_MarshalJSON(t *testing.T) {
   "endMeterKwh": 163.85,
   "price": 122.4,
   "priceLimit": 212,
+  "cost": 274.3,
   "averagePricePerKwh": 6,
   "averageCo2PerKwh": 100,
   "averageRenewablePerKwh": 72.5,
