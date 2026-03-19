@@ -107,7 +107,7 @@ func newClientWithAuthentication(cmd *cobra.Command) (monta.Client, error) {
 			if err != nil {
 				return nil, err
 			}
-			refreshedTokenData, err := json.MarshalIndent(refreshedToken, "", "  ")
+			refreshedTokenData, err := json.MarshalIndent(refreshedToken, "", "  ") //nolint:gosec // #nosec G117
 			if err != nil {
 				return nil, err
 			}
@@ -613,7 +613,7 @@ func newLoginCommand() *cobra.Command {
 		if err != nil {
 			return err
 		}
-		tokenData, err := json.MarshalIndent(&token, "", "  ")
+		tokenData, err := json.MarshalIndent(&token, "", "  ") //nolint:gosec // #nosec G117
 		if err != nil {
 			return err
 		}
