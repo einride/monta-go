@@ -1,6 +1,6 @@
 module go.einride.tech/monta/cmd/monta
 
-go 1.25.7
+go 1.26.1
 
 require (
 	github.com/adrg/xdg v0.5.3
