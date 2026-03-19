@@ -44,7 +44,7 @@ func (c *clientImpl) CreateToken(ctx context.Context, request *CreateTokenReques
 		}
 	}()
 	var requestBody bytes.Buffer
-	if err := json.NewEncoder(&requestBody).Encode(request); err != nil {
+	if err := json.NewEncoder(&requestBody).Encode(request); err != nil { //nolint:gosec // #nosec G117
 		return nil, err
 	}
 	httpRequest, err := http.NewRequestWithContext(ctx, method, apiHost+path, &requestBody)
@@ -78,7 +78,7 @@ func (c *clientImpl) RefreshToken(ctx context.Context, request *RefreshTokenRequ
 		}
 	}()
 	var requestBody bytes.Buffer
-	if err := json.NewEncoder(&requestBody).Encode(request); err != nil {
+	if err := json.NewEncoder(&requestBody).Encode(request); err != nil { //nolint:gosec // #nosec G117
 		return nil, err
 	}
 	httpRequest, err := http.NewRequestWithContext(ctx, method, apiHost+path, &requestBody)
