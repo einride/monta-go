@@ -12,6 +12,15 @@ import (
 
 const apiHost = "https://partner-api.monta.com/api"
 
+const (
+	// defaultMaxRetries is the number of retries performed for idempotent
+	// requests that fail with a transient error.
+	defaultMaxRetries = 3
+	// defaultRetryBaseDelay is the base delay used for exponential backoff
+	// between retries.
+	defaultRetryBaseDelay = 200 * time.Millisecond
+)
+
 type Client interface {
 	GetMe(ctx context.Context) (*Me, error)
 
@@ -110,6 +119,10 @@ func NewClient(options ...ClientOption) Client {
 	client := &clientImpl{
 		httpClient:     http.DefaultClient,
 		tokenSemaphore: make(chan struct{}, 1),
+		config: clientConfig{
+			maxRetries:     defaultMaxRetries,
+			retryBaseDelay: defaultRetryBaseDelay,
+		},
 	}
 	for _, option := range options {
 		option(&client.config)
@@ -120,9 +133,11 @@ func NewClient(options ...ClientOption) Client {
 }
 
 type clientConfig struct {
-	clientID     string
-	clientSecret string
-	token        *Token
+	clientID       string
+	clientSecret   string
+	token          *Token
+	maxRetries     int
+	retryBaseDelay time.Duration
 }
 
 // WithClientIDAndSecret configures authentication using the provided client ID and secret.
@@ -137,6 +152,17 @@ func WithClientIDAndSecret(clientID, clientSecret string) ClientOption {
 func WithToken(token *Token) ClientOption {
 	return func(config *clientConfig) {
 		config.token = token
+	}
+}
+
+// WithRetry configures automatic retries for idempotent (GET) requests that
+// fail with a transient error (a network error, or an HTTP 429 or 5xx
+// response). Retries use exponential backoff starting at baseDelay. Set
+// maxRetries to 0 to disable retries.
+func WithRetry(maxRetries int, baseDelay time.Duration) ClientOption {
+	return func(config *clientConfig) {
+		config.maxRetries = maxRetries
+		config.retryBaseDelay = baseDelay
 	}
 }
 
@@ -258,16 +284,13 @@ func execute[T any](
 	if err := client.setAuthorization(ctx, httpRequest); err != nil {
 		return nil, err
 	}
-	httpResponse, err := client.httpClient.Do(httpRequest)
+	httpResponse, err := client.doWithRetry(ctx, httpRequest, method)
 	if err != nil {
 		return nil, err
 	}
 	defer func() {
 		_ = httpResponse.Body.Close()
 	}()
-	if httpResponse.StatusCode != http.StatusOK && httpResponse.StatusCode != http.StatusCreated {
-		return nil, newStatusError(httpResponse)
-	}
 	respBody, err := io.ReadAll(httpResponse.Body)
 	if err != nil {
 		return nil, err
@@ -277,4 +300,70 @@ func execute[T any](
 	}
 	var response T
 	return &response, json.Unmarshal(respBody, &response)
+}
+
+// doWithRetry executes the request, retrying idempotent (GET) requests that
+// fail with a transient error (a network error, or an HTTP 429 or 5xx
+// response). It returns a response with a status of 200 OK or 201 Created and
+// an open body, or an error. The bodies of failed responses are closed before
+// returning.
+func (c *clientImpl) doWithRetry(ctx context.Context, request *http.Request, method string) (*http.Response, error) {
+	retryable := method == http.MethodGet
+	var lastErr error
+	for attempt := 0; attempt <= c.config.maxRetries; attempt++ {
+		if attempt > 0 {
+			if err := sleepWithBackoff(ctx, c.config.retryBaseDelay, attempt); err != nil {
+				return nil, err
+			}
+		}
+		httpResponse, err := c.httpClient.Do(request)
+		if err != nil {
+			lastErr = err
+			if retryable {
+				continue
+			}
+			return nil, err
+		}
+		if httpResponse.StatusCode == http.StatusOK || httpResponse.StatusCode == http.StatusCreated {
+			return httpResponse, nil
+		}
+		statusErr := newStatusError(httpResponse)
+		_ = httpResponse.Body.Close()
+		lastErr = statusErr
+		if retryable && retryableStatusCode(httpResponse.StatusCode) {
+			continue
+		}
+		return nil, statusErr
+	}
+	return nil, lastErr
+}
+
+// retryableStatusCode reports whether an HTTP status code represents a
+// transient failure that warrants a retry.
+func retryableStatusCode(statusCode int) bool {
+	return statusCode == http.StatusTooManyRequests || statusCode >= http.StatusInternalServerError
+}
+
+// sleepWithBackoff waits for an exponentially increasing delay based on the
+// attempt number, returning early if the context is cancelled.
+func sleepWithBackoff(ctx context.Context, baseDelay time.Duration, attempt int) error {
+	timer := time.NewTimer(backoffDelay(baseDelay, attempt))
+	defer timer.Stop()
+	select {
+	case <-ctx.Done():
+		return ctx.Err()
+	case <-timer.C:
+		return nil
+	}
+}
+
+// backoffDelay returns the delay before the given (1-based) retry attempt,
+// doubling with each attempt while capping the exponent to avoid overflow.
+func backoffDelay(baseDelay time.Duration, attempt int) time.Duration {
+	const maxShift = 6
+	shift := attempt - 1
+	if shift > maxShift {
+		shift = maxShift
+	}
+	return baseDelay << shift
 }
