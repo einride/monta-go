@@ -1,38 +1,18 @@
 version: 2
 
+multi-ecosystem-groups:
+  all-dependencies:
+    schedule:
+      interval: "monthly"
+
 updates:
   - package-ecosystem: gomod
-    directory: .sage
-    schedule:
-      interval: "monthly"
-
-    cooldown:
-      default-days: 7
-      semver-major-days: 30
-      semver-minor-days: 7
-      semver-patch-days: 3
-      exclude:
-        - github.com/einride/*
-        - github.com/einride-autonomous/*
-        - github.com/einride-labs/*
-  - package-ecosystem: gomod
-    directory: /
-    schedule:
-      interval: "monthly"
-
-    cooldown:
-      default-days: 7
-      semver-major-days: 30
-      semver-minor-days: 7
-      semver-patch-days: 3
-      exclude:
-        - github.com/einride/*
-        - github.com/einride-autonomous/*
-        - github.com/einride-labs/*
-  - package-ecosystem: gomod
-    directory: cmd/monta
-    schedule:
-      interval: "monthly"
+    directories:
+      - .sage
+      - /
+      - cmd/monta
+    multi-ecosystem-group: "all-dependencies"
+    patterns: ["*"]
     cooldown:
       default-days: 7
       semver-major-days: 30
