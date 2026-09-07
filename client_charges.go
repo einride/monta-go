@@ -41,6 +41,11 @@ type ListChargesRequest struct {
 
 	// Filter to retrieve charges where createdAt <= toDate.
 	ToDate *time.Time
+
+	// Filter to indicate the desired role to list charges. When omitted, the Monta API
+	// defaults to [OperatorRoleOwner]. [OperatorRoleOwner] returns charges from the
+	// operator's charge points, [OperatorRolePayer] returns charges paid by the operator.
+	OperatorRole *OperatorRole
 }
 
 // ListChargesResponse is the response output from the [Client.ListCharges] method.
@@ -98,6 +103,9 @@ func (c *clientImpl) ListCharges(ctx context.Context, request *ListChargesReques
 	}
 	if request.ToDate != nil {
 		query.Set("toDate", request.ToDate.UTC().Format(time.RFC3339))
+	}
+	if request.OperatorRole != nil {
+		query.Set("operatorRole", string(*request.OperatorRole))
 	}
 	return doGet[ListChargesResponse](ctx, c, path, query)
 }
