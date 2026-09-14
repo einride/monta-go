@@ -68,6 +68,11 @@ func TestCharge_MarshalJSON(t *testing.T) {
     "identifier": "einride",
     "vatNumber": "123",
     "partnerId": 423
+  },
+  "publicChargePoint": {
+    "id": 21,
+    "chargePointOperatorId": 4396,
+    "chargePointOperatorName": "EV Edison: EV Edison"
   }
 }
 	`)
@@ -76,4 +81,10 @@ func TestCharge_MarshalJSON(t *testing.T) {
 	actual, err := json.MarshalIndent(&charge, "", "  ")
 	assert.NilError(t, err)
 	assert.Equal(t, expected, string(actual))
+}
+
+func TestCharge_UnmarshalJSON_MissingPublicChargePoint(t *testing.T) {
+	var charge Charge
+	assert.NilError(t, json.Unmarshal([]byte(`{"id":1,"chargePointId":21}`), &charge))
+	assert.Assert(t, charge.PublicChargePoint == nil)
 }

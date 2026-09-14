@@ -111,6 +111,22 @@ type Charge struct {
 
 	// Operator of this charge
 	Operator *Operator `json:"operator"`
+
+	// PublicChargePoint is public information about a charge point related to a charge.
+	// Only operator identification fields are mapped; other Partner API properties are ignored.
+	PublicChargePoint *PublicChargePoint `json:"publicChargePoint"`
+}
+
+// PublicChargePoint is public information about a charge point related to a charge.
+type PublicChargePoint struct {
+	// ID of this charge point.
+	ID int64 `json:"id"`
+
+	// ID of the charge point operator.
+	ChargePointOperatorID *int64 `json:"chargePointOperatorId"`
+
+	// Name of the charge point operator.
+	ChargePointOperatorName string `json:"chargePointOperatorName"`
 }
 
 // Sum of kwh for a given hour.
